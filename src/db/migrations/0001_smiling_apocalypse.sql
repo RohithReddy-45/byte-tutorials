@@ -1,0 +1,1 @@
+ALTER TABLE `watch_list` ALTER COLUMN "video_id" TO "video_id" text NOT NULL REFERENCES youtube_details(video_id) ON DELETE no action ON UPDATE no action;

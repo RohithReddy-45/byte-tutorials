@@ -1,0 +1,74 @@
+import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { Toaster } from "@/components/ui/toaster";
+import { cn } from "@/lib/utils";
+import { ThemeProvider } from "@/providers/ThemeProvider";
+import type { Metadata } from "next";
+import { Inter } from "next/font/google";
+import "./globals.css";
+const inter = Inter({ subsets: ["latin"] });
+
+export const metadata: Metadata = {
+  title: {
+    template: "%s | DevTube",
+    default: "DevTube - Curated Tech Learning Platform",
+  },
+  icons: {
+    icon: [
+      {
+        media: "(prefers-color-scheme: light)",
+        url: "/icons/favicon-dark.ico",
+        href: "/icons/favicon-dark.ico",
+      },
+      {
+        media: "(prefers-color-scheme: dark)",
+        url: "/icons/favicon-light.ico",
+        href: "/icons/favicon-light.ico",
+      },
+    ],
+  },
+  description:
+    "Learn tech skills through curated YouTube courses. Find and organize top programming tutorials across web development, mobile apps, data science and more.",
+  keywords: [
+    "programming tutorials",
+    "coding courses",
+    "tech learning",
+    "developer education",
+    "software development",
+  ],
+  authors: [{ name: "DevTube" }],
+  openGraph: {
+    title: "DevTube - Curated Tech Learning Platform",
+    description:
+      "Learn tech skills through curated YouTube courses. Find and organize top programming tutorials across web development, mobile apps, data science and more.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "DevTube - Curated Tech Learning Platform",
+    description: "Learn tech skills through curated YouTube courses",
+  },
+};
+
+export default function RootLayout({
+  children,
+}: Readonly<{
+  children: React.ReactNode;
+}>) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />*/}
+      <body className={cn("antialiased bg-background", inter.className)}>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <NuqsAdapter>{children}</NuqsAdapter>
+          <Toaster />
+        </ThemeProvider>
+      </body>
+    </html>
+  );
+}

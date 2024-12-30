@@ -1,0 +1,101 @@
+import {
+	BarChart,
+	BrainCog,
+	Brush,
+	CodeXml,
+	Shield,
+	TabletSmartphone,
+} from "lucide-react";
+
+export const COOKIE_NAME = "session";
+
+export const PER_PAGE = 20;
+
+export const technologies = [
+	"Angular",
+	"ASP.NET",
+	"AWS",
+	"C#",
+	"C++",
+	"Dart",
+	"Deno",
+	"Django",
+	"Docker",
+	"Elixir",
+	"Express.js",
+	"Expo",
+	"Firebase",
+	"Flask",
+	"Flutter",
+	"Golang",
+	"GraphQL",
+	"gRPC",
+	"Haskell",
+	"Java",
+	"JavaScript",
+	"Jest",
+	"Kotlin",
+	"Kubernetes",
+	"Laravel",
+	"Lua",
+	"MongoDB",
+	"MySQL",
+	"Next.js",
+	"Node.js",
+	"NumPy",
+	"Pandas",
+	"PHP",
+	"PostgreSQL",
+	"Python",
+	"PyTorch",
+	"R",
+	"React",
+	"React Native",
+	"Redis",
+	"REST API",
+	"Ruby",
+	"Ruby on Rails",
+	"Rust",
+	"Sass",
+	"Scala",
+	"Scikit-learn",
+	"Socket.IO",
+	"Spring Boot",
+	"Supabase",
+	"Svelte",
+	"Swift",
+	"Tailwind CSS",
+	"TensorFlow",
+	"tRPC",
+	"TypeScript",
+	"Vue.js",
+	"WebSockets",
+];
+
+
+export const categories = [
+	{
+		icon: <CodeXml size={48} className="stroke-foreground dark:stroke-white" />,
+		title: "Web Development",
+	},
+	{
+		icon: <TabletSmartphone size={48} className="stroke-foreground dark:stroke-white" />,
+		title: "Mobile Development",
+	},
+	{
+		icon: <BarChart size={48} stroke="white" className="stroke-foreground dark:stroke-white" />,
+		title: "Data Science",
+	},
+	{
+		icon: <BrainCog size={48} stroke="white" className="stroke-foreground dark:stroke-white" />,
+		title: "Machine Learning",
+	},
+	{
+		icon: <Brush size={48} stroke="white" className="stroke-foreground dark:stroke-white" />,
+		title: "Design",
+	},
+	{
+		icon: <Shield size={48} stroke="white" className="stroke-foreground dark:stroke-white" />,
+		title: "Cybersecurity",
+	},
+];
