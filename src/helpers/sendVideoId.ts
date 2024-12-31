@@ -1,5 +1,6 @@
+import "server-only";
+
 export async function sendVideoId(link: string, title: string, tags: string[]) {
-  console.log("send", tags);
   const videoId = link.split("v=")[1];
   if (!videoId) {
     throw new Error("Invalid video link");
