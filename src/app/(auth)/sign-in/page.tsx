@@ -15,9 +15,19 @@ export const metadata: Metadata = {
     "Sign in to DevTube to access curated programming courses and manage your learning journey",
 };
 
-export default function AuthPage() {
+type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
+
+export default async function AuthPage(props: {
+  searchParams: SearchParams;
+}) {
+  const searchParams = await props.searchParams;
+  const error = searchParams.error as string;
+
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">
+      {error && (
+        <div className="text-red-500 text-center absolute top-40">{error}</div>
+      )}
       <Card className="w-full max-w-md border-none bg-secondary shadow-xl min-w-[280px]">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">

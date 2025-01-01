@@ -69,13 +69,23 @@ export async function GET(request: Request): Promise<Response> {
     });
   }
 
-  const userId = await createUser({
+  const { success, userId, error } = await createUser({
     provider: "google",
     providerId: googleId,
     email,
     displayName,
     avatarUrl,
   });
+
+  if (error || !success || !userId) {
+    const errorMessage = error || "Unknown error occurred";
+    return new Response(null, {
+      status: 302,
+      headers: {
+        Location: `/sign-in?error=${encodeURIComponent(errorMessage)}`,
+      },
+    });
+  }
 
   const sessionToken = generateSessionToken();
   const session = await createSession(sessionToken, userId);

@@ -4,6 +4,12 @@ import { authAccounts, users } from "@/db/schema";
 import { eq } from "drizzle-orm";
 import type { User } from "./types";
 
+type CreateUserResponse = {
+  success: boolean;
+  userId?: string;
+  error?: string;
+};
+
 export async function createUser({
   provider,
   providerId,
@@ -16,7 +22,7 @@ export async function createUser({
   email: string;
   displayName: string;
   avatarUrl: string;
-}): Promise<string> {
+}): Promise<CreateUserResponse> {
   try {
     const result = await db.transaction(async (tx) => {
       const existingUser = await tx
@@ -26,24 +32,7 @@ export async function createUser({
         .limit(1);
 
       if (existingUser.length > 0) {
-        await tx
-          .update(users)
-          .set({
-            displayName,
-            avatarUrl,
-            updatedAt: new Date().toISOString(),
-          })
-          .where(eq(users.id, existingUser[0].id));
-
-        await tx
-          .update(authAccounts)
-          .set({
-            provider: provider,
-            providerAccountId: providerId,
-          })
-          .where(eq(authAccounts.userId, existingUser[0].id));
-
-        return existingUser[0].id;
+        throw new Error("User already exists with same email.");
       }
 
       const [newUser] = await tx
@@ -66,8 +55,11 @@ export async function createUser({
       return newUser.id;
     });
 
-    return result;
+    return { success: true, userId: result };
   } catch (error) {
+    if (error instanceof Error) {
+      return { success: false, error: error.message };
+    }
     console.error(error);
     throw new Error("Failed to create user");
   }
