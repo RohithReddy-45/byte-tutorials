@@ -10,6 +10,8 @@ import CourseSection from "./_components/course-section";
 import PageNavigation from "./_components/page-navigation";
 import { Suspense } from "react";
 import { PulseLoader } from "./_components/pulse-loader";
+import { getCurrentSession } from "@/lib/validate-request";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Browse Courses",
@@ -28,6 +30,11 @@ export default async function Dashboard(props: {
     : 1;
   const query = searchParams.q as string;
   const tech = searchParams.tech as string;
+  const { user } = await getCurrentSession();
+
+  if (!user) {
+    redirect("/sign-in");
+  }
 
   let coursesData: {
     data: YoutubeDetails[];
@@ -69,7 +76,7 @@ export default async function Dashboard(props: {
         perPage: PER_PAGE,
       };
     } else {
-      coursesData = await getYoutubeDetailsPaginated(page, PER_PAGE);
+      coursesData = await getYoutubeDetailsPaginated(user.id, page, PER_PAGE);
     }
   } catch (error) {
     console.error("Error fetching courses:", error);

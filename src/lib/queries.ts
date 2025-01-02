@@ -1,13 +1,14 @@
-import "server-only";
+//import "server-only";
 import { db } from "@/db/database";
 
-import { watchListTable, youtubeDetailsTable } from "@/db/schema";
+import { users, watchListTable, youtubeDetailsTable } from "@/db/schema";
 import { PER_PAGE } from "@/constants/constants";
 import { and, desc, eq, or, sql } from "drizzle-orm";
 import { cache } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { getCurrentSession } from "./validate-request";
-//import { fetchVideoInfo } from "./fetchVideoInfo";
+import { unstable_cache } from "next/cache";
+import { fetchVideoInfo } from "./fetchVideoInfo";
 
 /* COURSE QUERIES  */
 export async function fetchWatchlistData(
@@ -51,26 +52,20 @@ export interface VideoInfo {
   author_name: string;
 }
 
-export const saveYoutubeDetails = async (
-  videoId: string,
-  title: string,
-  tags: string,
-) => {
-  if (!videoId?.trim()) {
-    throw new Error("Video ID is required");
+export const saveYoutubeDetails = async (videoId: string, tags: string) => {
+  if (!videoId?.trim() || !tags?.trim()) {
+    throw new Error("Video ID and tags are required");
   }
-  if (!title?.trim()) {
-    throw new Error("Title is required");
-  }
+
   const { user } = await getCurrentSession();
   if (!user || user.role !== "admin") {
     throw new Error("Unauthorized");
   }
-  //https://www.youtube.com/watch?v=HD13eq_Pmp8
-  //const { title, author_url, author_name } = await fetchVideoInfo(videoId);
-  //if (!title || !author_url || !author_name) {
-  //  throw new Error("Failed to fetch video info");
-  //}
+
+  const { title, author_url, author_name } = await fetchVideoInfo(videoId);
+  if (!title || !author_url || !author_name) {
+    throw new Error("Failed to fetch video info");
+  }
 
   try {
     const existing = await db
@@ -88,6 +83,8 @@ export const saveYoutubeDetails = async (
       videoId,
       title,
       tags,
+      creator: author_name,
+      creatorUrl: author_url,
     });
     return {
       success: true,
@@ -98,18 +95,24 @@ export const saveYoutubeDetails = async (
       error: error instanceof Error ? error.message : "Unknown error occurred",
     };
   }
-
-  //return {
-  //  success: false,
-  //  error: "Unknown error occurred",
-  //};
 };
 
-export const getYoutubeDetailsPaginated = cache(
-  async (page: number, perPage: number) => {
-    const { user } = await getCurrentSession();
+export const getUser = cache(async (userId: string) => {
+  const user = await db
+    .select({
+      id: users.id,
+    })
+    .from(users)
+    .where(eq(users.id, userId))
+    .limit(1);
+  return user[0];
+});
 
-    if (!user) {
+export const getYoutubeDetailsPaginated = unstable_cache(
+  async (userId: string, page: number, perPage: number) => {
+    const user = await getUser(userId);
+
+    if (!user.id) {
       throw new Error("Unauthorized");
     }
 
@@ -132,6 +135,10 @@ export const getYoutubeDetailsPaginated = cache(
       perPage,
       currentPage: page,
     };
+  },
+  ["youtube-details"],
+  {
+    revalidate: 3 * 60 * 60,
   },
 );
 

@@ -3,7 +3,7 @@ import Link from "next/link";
 
 export default function Hero() {
   return (
-    <div className="container mx-auto flex leading-6 h-full flex-col items-center justify-center gap-5 px-10 py-10 text-center sm:px-24">
+    <section className="container mx-auto flex leading-6 h-full flex-col items-center justify-center gap-5 px-10 py-10 text-center sm:px-24">
       <h1 className="text-3xl font-bold sm:text-4xl md:text-6xl">
         Master Tech Skills with Handpicked YouTube Courses
       </h1>
@@ -16,6 +16,6 @@ export default function Hero() {
           Start learning now
         </Button>
       </Link>
-    </div>
+    </section>
   );
 }

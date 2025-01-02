@@ -69,6 +69,8 @@ export const youtubeDetailsTable = sqliteTable(
     videoId: t.text("video_id").notNull().unique(),
     title: t.text("title").notNull(),
     tags: t.text("tags").notNull().default("[]"),
+    creator: t.text("creator").notNull(),
+    creatorUrl: t.text("creator_url").notNull(),
     createdAt: t.text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
   },
   (table) => {

@@ -20,14 +20,11 @@ export async function adminFormAction(formData: YoutubeValues) {
   }
 
   try {
-    const { link, title, tags } = VideoSchema.parse(formData);
-    console.log("Saving video details", { link, title, tags });
-
-    const videoId = link.split("v=")[1];
+    const { link, tags } = VideoSchema.parse(formData);
+    const videoId = link.split("v=")[1].split("&")[0];
     const tagsString = tags.join(",");
 
-    const result = await saveYoutubeDetails(videoId, title, tagsString);
-    console.log("action result", result);
+    const result = await saveYoutubeDetails(videoId, tagsString);
     if (result.error) {
       throw new Error(result.error);
     }

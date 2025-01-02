@@ -6,14 +6,13 @@ export type YoutubeDetails = {
   videoId: string;
   title: string;
   tags: string;
+  creator: string;
+  creatorUrl: string;
 };
 
 export const VideoSchema = z.object({
   link: z.string().regex(YT_REGEX, { message: "Invalid YouTube URL" }),
-  title: z
-    .string()
-    .min(5, { message: "Must be a minimum of 5 characters" })
-    .max(1000, { message: "Must be a maximum of 1000 characters" }),
+  title: z.string().optional(),
   tags: z.array(z.string()).min(1, { message: "Select at least one tag" }),
 });
 

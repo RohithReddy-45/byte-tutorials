@@ -9,8 +9,8 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: {
-    template: "%s | DevTube",
-    default: "DevTube - Curated Tech Learning Platform",
+    template: "%s | Byte tutorials",
+    default: "Byte tutorials - Curated Tech Learning Platform",
   },
   icons: {
     icon: [
@@ -35,9 +35,9 @@ export const metadata: Metadata = {
     "developer education",
     "software development",
   ],
-  authors: [{ name: "DevTube" }],
+  authors: [{ name: "Byte tutorials" }],
   openGraph: {
-    title: "DevTube - Curated Tech Learning Platform",
+    title: "Byte tutorials - Curated Tech Learning Platform",
     description:
       "Learn tech skills through curated YouTube courses. Find and organize top programming tutorials across web development, mobile apps, data science and more.",
     type: "website",
@@ -45,7 +45,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "DevTube - Curated Tech Learning Platform",
+    title: "Byte tutorials - Curated Tech Learning Platform",
     description: "Learn tech skills through curated YouTube courses",
   },
 };

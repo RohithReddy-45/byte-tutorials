@@ -7,9 +7,10 @@ import { Bookmark, Play, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent, CardFooter } from "./ui/card";
 import { Button } from "./ui/button";
 import { Badge } from "./ui/badge";
+import type { UrlObject } from "node:url";
 
 export default function CourseCard({
   courses,
@@ -22,7 +23,7 @@ export default function CourseCard({
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
-  const { videoId, title, tags } = courses;
+  const { videoId, title, tags, creatorUrl, creator } = courses;
   const tagsArray = tags.split(",");
 
   const toggleExpand = () => {
@@ -137,9 +138,15 @@ export default function CourseCard({
             {title}
           </h2>
         </CardContent>
-        {/* <CardFooter className="p-3 pt-2">
-          <Progress value={33} className="h-1" />
-        </CardFooter> */}
+        <CardFooter className="p-3 pt-0 text-sm text-neutral-400">
+          <Link
+            target="_blank"
+            rel="noopener noreferrer"
+            href={creatorUrl as unknown as UrlObject}
+          >
+            <span className="line-clamp-1">{creator}</span>
+          </Link>
+        </CardFooter>
       </Card>
 
       {isExpanded && (

@@ -1,9 +1,10 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Original+Surfer&display=swap");
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-
-*{
+* {
   scrollbar-width: thin;
   scroll-behavior: smooth;
 }
@@ -12,6 +13,12 @@
   inherits: false;
   initial-value: 0deg;
   syntax: "<angle>";
+}
+
+.font-original-surfer {
+  font-family: "Original Surfer", serif;
+  font-weight: 400;
+  font-style: normal;
 }
 
 @layer base {

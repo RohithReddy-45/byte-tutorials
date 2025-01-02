@@ -12,7 +12,7 @@ import { FaGithub } from "react-icons/fa6";
 export const metadata: Metadata = {
   title: "Sign In",
   description:
-    "Sign in to DevTube to access curated programming courses and manage your learning journey",
+    "Sign in to Byte tutorials to access curated programming courses and manage your learning journey",
 };
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
@@ -31,7 +31,7 @@ export default async function AuthPage(props: {
       <Card className="w-full max-w-md border-none bg-secondary shadow-xl min-w-[280px]">
         <CardHeader className="space-y-1">
           <CardTitle className="text-2xl font-bold text-center">
-            Sign in
+            Sign in to byte tutorials
           </CardTitle>
           <CardDescription className="text-center">
             Choose your preferred sign in method
