@@ -294,6 +294,8 @@ export const getWatchlistPaginated = cache(
         videoId: watchListTable.videoId,
         title: youtubeDetailsTable.title,
         tags: youtubeDetailsTable.tags,
+        creator: youtubeDetailsTable.creator,
+        creatorUrl: youtubeDetailsTable.creatorUrl,
         createdAt: watchListTable.createdAt,
       })
       .from(watchListTable)
@@ -366,6 +368,8 @@ export const filterWatchlistByQuery = cache(
         videoId: watchListTable.videoId,
         title: youtubeDetailsTable.title,
         tags: youtubeDetailsTable.tags,
+        creator: youtubeDetailsTable.creator,
+        creatorUrl: youtubeDetailsTable.creatorUrl,
         createdAt: watchListTable.createdAt,
       })
       .from(watchListTable)
@@ -419,6 +423,8 @@ export const filterWatchlistByTags = cache(
         videoId: watchListTable.videoId,
         title: youtubeDetailsTable.title,
         tags: youtubeDetailsTable.tags,
+        creator: youtubeDetailsTable.creator,
+        creatorUrl: youtubeDetailsTable.creatorUrl,
         createdAt: watchListTable.createdAt,
       })
       .from(watchListTable)

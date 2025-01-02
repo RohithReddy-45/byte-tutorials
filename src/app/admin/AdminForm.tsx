@@ -35,7 +35,6 @@ export default function AdminForm() {
     resolver: zodResolver(VideoSchema),
     defaultValues: {
       link: "",
-      title: "",
       tags: [],
     },
   });

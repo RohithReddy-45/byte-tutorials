@@ -66,6 +66,8 @@ export default async function WatchlistPage(props: {
               ...course,
               title: course.title ?? "",
               tags: course.tags ?? "",
+              creator: course.creator ?? "",
+              creatorUrl: course.creatorUrl ?? "",
             }))}
           />
           {coursesData.total > PER_PAGE && (
