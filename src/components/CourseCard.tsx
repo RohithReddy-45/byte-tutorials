@@ -9,8 +9,14 @@ import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
 import { Card, CardContent, CardFooter } from "./ui/card";
 import { Button } from "./ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+} from "@/components/ui/dialog";
 import { Badge } from "./ui/badge";
 import type { UrlObject } from "node:url";
+import { DialogTitle } from "@radix-ui/react-dialog";
 
 export default function CourseCard({
   courses,
@@ -25,6 +31,14 @@ export default function CourseCard({
   const { toast } = useToast();
   const { videoId, title, tags, creatorUrl, creator } = courses;
   const tagsArray = tags.split(",");
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 768);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
 
   const toggleExpand = () => {
     setIsExpanded((prev) => !prev);
@@ -75,9 +89,35 @@ export default function CourseCard({
     };
   }, [isExpanded]);
 
+  const VideoPlayer = () => (
+    <div className="relative w-full h-full">
+      <iframe
+        id="player"
+        key={videoId}
+        width="100%"
+        height="100%"
+        src={`https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&origin=${window.location.origin}&playsinline=1&controls=1`}
+        title={title}
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        referrerPolicy="strict-origin-when-cross-origin"
+        allowFullScreen
+        className="absolute inset-0"
+      />
+      <Button
+        variant="ghost"
+        size="icon"
+        onClick={toggleExpand}
+        className="absolute right-4 -top-6 z-20 bg-black/70 hover:bg-black-70"
+        aria-label="Close video"
+      >
+        <X className="size-6 text-white" />
+      </Button>
+    </div>
+  );
+
   return (
     <>
-      <Card className="overflow-hidden rounded-lg border-none transition-all duration-300 hover:shadow-lg dark:bg-accent">
+      <Card className="overflow-hidden rounded-lg border-none transition-all duration-300 shadow-md hover:shadow-lg bg-accent/50">
         <div
           className="group relative cursor-pointer"
           onClick={toggleExpand}
@@ -104,18 +144,15 @@ export default function CourseCard({
         </div>
         <CardContent className="space-y-2 px-3 py-1">
           <div className="flex items-center justify-between">
-            <div className="flex flex-wrap gap-1">
-              {tagsArray.map((tag) => (
-                <Link key={tag} href={`?tech=${tag}`}>
-                  <Badge
-                    variant="secondary"
-                    className="cursor-pointer bg-neutral-400/25 hover:bg-neutral-400/50"
-                  >
-                    {tag}
-                  </Badge>
-                </Link>
-              ))}
-            </div>
+            <Link
+              target="_blank"
+              rel="noopener noreferrer"
+              href={creatorUrl as unknown as UrlObject}
+            >
+              <span className="line-clamp-1 text-neutral-600 dark:text-neutral-400 dark:hover:text-neutral-200 hover:text-neutral-800 duration-300 transition-colors">
+                {creator}
+              </span>
+            </Link>
             <Button
               variant="ghost"
               size="icon"
@@ -138,46 +175,37 @@ export default function CourseCard({
             {title}
           </h2>
         </CardContent>
-        <CardFooter className="p-3 pt-0 text-sm text-neutral-400">
-          <Link
-            target="_blank"
-            rel="noopener noreferrer"
-            href={creatorUrl as unknown as UrlObject}
-          >
-            <span className="line-clamp-1">{creator}</span>
-          </Link>
+        <CardFooter className="p-3 pt-0 text-sm">
+          <div className="flex flex-wrap gap-1">
+            {tagsArray.map((tag) => (
+              <Link key={tag} href={`?tech=${tag}`}>
+                <Badge
+                  variant="secondary"
+                  className="cursor-pointer bg-neutral-400/25 hover:bg-neutral-400/50"
+                >
+                  {tag}
+                </Badge>
+              </Link>
+            ))}
+          </div>
         </CardFooter>
       </Card>
-
-      {isExpanded && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 backdrop-blur-sm">
-          <Button
-            variant="ghost"
-            size="icon"
-            onClick={(e) => {
-              e.stopPropagation();
-              toggleExpand();
-            }}
-            className="absolute right-2 top-2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200"
-            aria-label="Close video"
-          >
-            <X className="size-8" />
-          </Button>
-          <div className="relative w-[90vw] max-w-4xl overflow-hidden rounded-lg bg-white shadow-2xl dark:bg-gray-800 md:w-screen">
-            <div className="relative h-0 pb-[56.25%]">
-              <iframe
-                id="player"
-                key={videoId}
-                src={`https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&origin=localhost:3000`}
-                title={title}
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                referrerPolicy="strict-origin-when-cross-origin"
-                allowFullScreen
-                className="absolute left-0 top-0 h-full w-full"
-              />
-            </div>
+      {isMobile ? (
+        isExpanded && (
+          <div className="fixed inset-0 pt-10 z-50 bg-black">
+            <VideoPlayer />
           </div>
-        </div>
+        )
+      ) : (
+        <Dialog open={isExpanded} onOpenChange={setIsExpanded}>
+          <DialogTitle className="sr-only">Youtube video player </DialogTitle>
+          <DialogDescription className="sr-only">
+            Youtube video player
+          </DialogDescription>
+          <DialogContent className="sm:max-w-[90vw] bg-black h-[90vh] border-0 p-0">
+            <VideoPlayer />
+          </DialogContent>
+        </Dialog>
       )}
     </>
   );

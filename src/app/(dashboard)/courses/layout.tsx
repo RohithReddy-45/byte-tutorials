@@ -16,7 +16,7 @@ export default async function DashboardLayout({
 
   return (
     <SessionProvider value={session}>
-      <div className="container flex flex-col gap-5 px-3 py-1 sm:px-6 sm:py-3 mx-auto leading-6 h-dvh">
+      <div className="container flex flex-col gap-5 px-3 sm:px-6 py-3 mx-auto leading-6 h-dvh">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center justify-between w-full">
             <Logo />
