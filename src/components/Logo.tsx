@@ -1,12 +1,26 @@
-import Link from "next/link";
+import Image from "next/image";
+import logoDark from "@/assets/logo-dark.png";
+import logoLight from "@/assets/logo-light.png";
+import { cn } from "@/lib/utils";
 
-export default function Logo() {
+type LogoProps = {
+  href?: string;
+  className?: string;
+};
+
+export default function Logo({ href, className }: LogoProps) {
   return (
-    <Link
-      href="/"
-      className="font-original-surfer text-neutral-800 dark:text-white text-2xl"
-    >
-      byte tutorials
-    </Link>
+    <a href={href || "/"}>
+      <Image
+        src={logoDark}
+        className={cn("w-48 min-w-40 hidden dark:block", className)}
+        alt="byte tutorials logo"
+      />
+      <Image
+        src={logoLight}
+        className={cn("w-48 min-w-40 dark:hidden", className)}
+        alt="byte tutorials logo"
+      />
+    </a>
   );
 }
