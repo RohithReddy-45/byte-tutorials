@@ -1,11 +1,15 @@
 import { z } from "zod";
 import { YT_REGEX } from "./utils";
 
+export interface Tag {
+  label: string;
+  slug: string;
+}
 export type YoutubeDetails = {
   id: string;
   videoId: string;
   title: string;
-  tags: string;
+  tags: Tag[];
   creator: string;
   creatorUrl: string;
 };
@@ -13,7 +17,9 @@ export type YoutubeDetails = {
 export const VideoSchema = z.object({
   link: z.string().regex(YT_REGEX, { message: "Invalid YouTube URL" }),
   title: z.string().optional(),
-  tags: z.array(z.string()).min(1, { message: "Select at least one tag" }),
+  tags: z
+    .array(z.object({ label: z.string(), slug: z.string() }))
+    .min(1, { message: "At least one tag is required" }),
 });
 
 export type YoutubeValues = z.infer<typeof VideoSchema>;

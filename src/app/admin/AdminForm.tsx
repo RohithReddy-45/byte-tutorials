@@ -35,7 +35,7 @@ export default function AdminForm() {
     resolver: zodResolver(VideoSchema),
     defaultValues: {
       link: "",
-      tags: [],
+      tags: [{ label: "", slug: "" }],
     },
   });
 
@@ -43,7 +43,6 @@ export default function AdminForm() {
     startTransition(async () => {
       try {
         const result = await adminFormAction(data);
-        console.log(result);
         if (result.error) {
           throw new Error(result.error);
         }
@@ -102,8 +101,21 @@ export default function AdminForm() {
               <FormLabel>Tags</FormLabel>
               <Select
                 onValueChange={(value) => {
-                  if (!field.value.includes(value)) {
-                    field.onChange([...field.value, value]);
+                  if (
+                    !field.value.some(
+                      (item: { label: string; slug: string }) =>
+                        item.slug === value,
+                    )
+                  ) {
+                    field.onChange([
+                      ...field.value,
+                      {
+                        label:
+                          technologies.find((tech) => tech.slug === value)
+                            ?.label || "",
+                        slug: value,
+                      },
+                    ]);
                   }
                 }}
               >
@@ -114,8 +126,8 @@ export default function AdminForm() {
                 </FormControl>
                 <SelectContent>
                   {technologies.map((tech) => (
-                    <SelectItem key={tech} value={tech}>
-                      {tech}
+                    <SelectItem key={tech.slug} value={tech.slug}>
+                      {tech.label}
                     </SelectItem>
                   ))}
                 </SelectContent>
@@ -123,11 +135,11 @@ export default function AdminForm() {
               <div className="flex flex-wrap gap-2 mt-2">
                 {field.value.map((tag) => (
                   <Badge
-                    key={tag}
+                    key={tag.slug}
                     variant="secondary"
                     className="flex items-center flex-wrap gap-1"
                   >
-                    {tag}
+                    {tag.label}
                     <X
                       size={14}
                       className="cursor-pointer"

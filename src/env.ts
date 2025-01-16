@@ -10,7 +10,6 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: z.string().min(1),
     TURSO_AUTH_TOKEN: z.string().min(1),
     TURSO_CONNECTION_URL: z.string().url(),
-    VIDEO_INFO_URL: z.string().url(),
   },
   client: {},
   runtimeEnv: {
@@ -21,6 +20,5 @@ export const env = createEnv({
     GOOGLE_CLIENT_SECRET: process.env.GOOGLE_CLIENT_SECRET,
     TURSO_CONNECTION_URL: process.env.TURSO_CONNECTION_URL,
     TURSO_AUTH_TOKEN: process.env.TURSO_AUTH_TOKEN,
-    VIDEO_INFO_URL: process.env.VIDEO_INFO_URL,
   },
 });

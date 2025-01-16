@@ -5,8 +5,8 @@ import Logo from "@/components/Logo";
 import { ModeToggle } from "@/components/ModeToggle";
 import Avatar from "@/components/Avatar";
 import SearchInput from "@/components/SearchInput";
-import FilterCard from "@/components/FilterCard";
 import { InfiniteMovingTags } from "./_components/infinite-moving-tags";
+import { TechFilter } from "@/components/ui/select-with-search";
 
 export default async function DashboardLayout({
   children,
@@ -27,7 +27,7 @@ export default async function DashboardLayout({
           </div>
         </div>
         <SearchInput />
-        <FilterCard />
+        <TechFilter />
         <div className="w-full">
           <InfiniteMovingTags direction="right" speed="slow" />
         </div>

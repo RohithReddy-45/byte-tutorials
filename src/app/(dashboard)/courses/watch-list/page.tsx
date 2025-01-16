@@ -65,7 +65,7 @@ export default async function WatchlistPage(props: {
             courses={coursesData.data.map((course) => ({
               ...course,
               title: course.title ?? "",
-              tags: course.tags ?? "",
+              tags: course.tags ?? [],
               creator: course.creator ?? "",
               creatorUrl: course.creatorUrl ?? "",
             }))}

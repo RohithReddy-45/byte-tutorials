@@ -1,4 +1,4 @@
-import { env } from "@/env";
+import "server-only";
 
 export interface VideoInfo {
   title: string;
@@ -7,10 +7,34 @@ export interface VideoInfo {
 }
 
 export async function fetchVideoInfo(videoId: string): Promise<VideoInfo> {
-  const response = await fetch(`${env.VIDEO_INFO_URL}?v=${videoId}`);
-  if (!response.ok) {
-    throw new Error("Failed to fetch video info");
+  const apiKey = process.env.YOUTUBE_API_KEY;
+  const url = `https://www.googleapis.com/youtube/v3/videos?part=snippet&id=${videoId}&key=${apiKey}`;
+
+  try {
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error(`Failed to fetch video info: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    if (!data.items || data.items.length === 0) {
+    }
+
+    const snippet = data.items[0].snippet;
+
+    return {
+      title: snippet.title,
+      author_name: snippet.channelTitle,
+      author_url: `https://www.youtube.com/channel/${snippet.channelId}`,
+    };
+  } catch (error) {
+    console.error("Error fetching video info:", error);
+    return {
+      title: "",
+      author_name: "",
+      author_url: "",
+    };
   }
-  const data = await response.json();
-  return data;
 }

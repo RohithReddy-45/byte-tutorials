@@ -22,9 +22,7 @@ export async function adminFormAction(formData: YoutubeValues) {
   try {
     const { link, tags } = VideoSchema.parse(formData);
     const videoId = link.split("v=")[1].split("&")[0];
-    const tagsString = tags.join(",");
-
-    const result = await saveYoutubeDetails(videoId, tagsString);
+    const result = await saveYoutubeDetails(videoId, tags);
     if (result.error) {
       throw new Error(result.error);
     }

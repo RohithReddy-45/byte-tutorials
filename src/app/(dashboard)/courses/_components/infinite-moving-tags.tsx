@@ -20,6 +20,7 @@ export function InfiniteMovingTags({
 }: InfiniteMovingTagsProps) {
   const { tech, setParams } = useParams();
   const selectedTech = tech ? tech.split(",") : [];
+
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollerRef = useRef<HTMLUListElement>(null);
   const [start, setStart] = useState(false);
@@ -39,9 +40,9 @@ export function InfiniteMovingTags({
         }
       }
 
+      setStart(true);
       getDirection();
       getSpeed();
-      setStart(true);
     }
   }
 
@@ -90,7 +91,7 @@ export function InfiniteMovingTags({
     <div
       ref={containerRef}
       className={cn(
-        "scroller relative z-20 max-w-7xl overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] dark:[mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]",
+        "scroller relative z-20 overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)] dark:[mask-image:linear-gradient(to_right,transparent,white_10%,white_90%,transparent)]",
         className,
       )}
       {...props}
@@ -103,16 +104,16 @@ export function InfiniteMovingTags({
           pauseOnHover && "hover:[animation-play-state:paused]",
         )}
       >
-        {technologies.map((item, id) => (
-          <li key={`${item}-${id}`}>
+        {technologies.map((item) => (
+          <li key={item.slug}>
             <button
               type="button"
               onClick={(e) => {
-                handleClick(e, item);
+                handleClick(e, item.slug);
               }}
               className="w-max max-w-full flex-shrink-0 rounded-full px-2 py-1 text-xs text-white font-medium cursor-pointer bg-blue-600"
             >
-              {item}
+              {item.label}
             </button>
           </li>
         ))}

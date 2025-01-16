@@ -1,14 +1,15 @@
-//import "server-only";
+import "server-only";
 import { db } from "@/db/database";
 
 import { users, watchListTable, youtubeDetailsTable } from "@/db/schema";
 import { PER_PAGE } from "@/constants/constants";
-import { and, desc, eq, or, sql } from "drizzle-orm";
+import { and, asc, desc, eq, or, sql } from "drizzle-orm";
 import { cache } from "react";
 import { v4 as uuidv4 } from "uuid";
 import { getCurrentSession } from "./validate-request";
 import { unstable_cache } from "next/cache";
 import { fetchVideoInfo } from "./fetchVideoInfo";
+import type { Tag } from "./types";
 
 /* COURSE QUERIES  */
 export async function fetchWatchlistData(
@@ -52,8 +53,8 @@ export interface VideoInfo {
   author_name: string;
 }
 
-export const saveYoutubeDetails = async (videoId: string, tags: string) => {
-  if (!videoId?.trim() || !tags?.trim()) {
+export const saveYoutubeDetails = async (videoId: string, tags: Tag[]) => {
+  if (!videoId?.trim() || !tags.length) {
     throw new Error("Video ID and tags are required");
   }
 
@@ -121,7 +122,7 @@ export const getYoutubeDetailsPaginated = unstable_cache(
     const videos = await db
       .select()
       .from(youtubeDetailsTable)
-      .orderBy(desc(youtubeDetailsTable.createdAt))
+      .orderBy(asc(youtubeDetailsTable.title))
       .limit(perPage)
       .offset(offset);
 
@@ -142,7 +143,6 @@ export const getYoutubeDetailsPaginated = unstable_cache(
   },
 );
 
-// BUG: fix tag query
 export const filterYoutubeDetailsByTags = cache(
   async (tech: string, page: number, perPage: number) => {
     const { user } = await getCurrentSession();
@@ -153,11 +153,16 @@ export const filterYoutubeDetailsByTags = cache(
     const tags = tech
       .split(",")
       .map((tag) => tag.toLowerCase().replace(/\s+/g, ""));
+
     const offset = (page - 1) * perPage;
 
     const tagConditions = tags.map(
       (tag) =>
-        sql`REPLACE(LOWER(${youtubeDetailsTable.tags}), ' ', '') LIKE ${`%${tag}%`}`,
+        sql`EXISTS (
+        SELECT 1
+        FROM json_each(${youtubeDetailsTable.tags})
+        WHERE json_each.value ->> 'slug' = ${tag}
+      )`,
     );
 
     const videos = await db
@@ -306,7 +311,7 @@ export const getWatchlistPaginated = cache(
       )
       .limit(perPage)
       .offset(offset)
-      .orderBy(desc(watchListTable.createdAt));
+      .orderBy(asc(youtubeDetailsTable.title));
 
     const [countResult] = await db
       .select({ count: sql<number>`count(*)` })
@@ -396,7 +401,6 @@ export const filterWatchlistByQuery = cache(
   },
 );
 
-//BUG: fix tag query
 export const filterWatchlistByTags = cache(
   async (userId: string, tech: string, page: number, perPage: number) => {
     const { user } = await getCurrentSession();
@@ -414,7 +418,11 @@ export const filterWatchlistByTags = cache(
 
     const tagConditions = tags.map(
       (tag) =>
-        sql`LOWER(${youtubeDetailsTable.tags}) LIKE ${`${tag.toLowerCase()}`}`,
+        sql`EXISTS (
+        SELECT 1
+        FROM json_each(${youtubeDetailsTable.tags})
+        WHERE json_each.value ->> 'slug' = ${tag}
+      )`,
     );
 
     const userWatchlistByTags = await db
@@ -451,7 +459,6 @@ export const filterWatchlistByTags = cache(
   },
 );
 
-// NOTE: check
 export const getUserWatchlist = cache(
   async (userId: string): Promise<string[]> => {
     const { user } = await getCurrentSession();

@@ -1,22 +1,22 @@
 "use client";
 
+import type { UrlObject } from "node:url";
 import { toggleWatchlistAction } from "@/app/(dashboard)/courses/watch-list/action";
-import { useToast } from "@/hooks/use-toast";
-import type { YoutubeDetails } from "@/lib/types";
-import { Bookmark, Play, X } from "lucide-react";
-import Image from "next/image";
-import Link from "next/link";
-import { useEffect, useState, useTransition } from "react";
-import { Card, CardContent, CardFooter } from "./ui/card";
-import { Button } from "./ui/button";
 import {
   Dialog,
   DialogContent,
   DialogDescription,
 } from "@/components/ui/dialog";
-import { Badge } from "./ui/badge";
-import type { UrlObject } from "node:url";
+import { useToast } from "@/hooks/use-toast";
+import type { YoutubeDetails } from "@/lib/types";
 import { DialogTitle } from "@radix-ui/react-dialog";
+import { Bookmark, Play, X } from "lucide-react";
+import Image from "next/image";
+import Link from "next/link";
+import { useEffect, useState, useTransition } from "react";
+import { Badge } from "./ui/badge";
+import { Button } from "./ui/button";
+import { Card, CardContent, CardFooter } from "./ui/card";
 
 export default function CourseCard({
   courses,
@@ -30,7 +30,7 @@ export default function CourseCard({
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const { videoId, title, tags, creatorUrl, creator } = courses;
-  const tagsArray = tags.split(",");
+
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
@@ -171,19 +171,19 @@ export default function CourseCard({
               />
             </Button>
           </div>
-          <h2 className="line-clamp-2 flex-grow pb-1 text-lg font-semibold text-gray-800 dark:text-gray-100">
+          <h2 className="line-clamp-2 flex-grow mb-1 text-lg font-semibold text-gray-800 dark:text-gray-100">
             {title}
           </h2>
         </CardContent>
         <CardFooter className="p-3 pt-0 text-sm">
           <div className="flex flex-wrap gap-1">
-            {tagsArray.map((tag) => (
-              <Link key={tag} href={`?tech=${tag}`}>
+            {tags.map((tag) => (
+              <Link key={tag.slug} href={`?tech=${tag.slug}`}>
                 <Badge
                   variant="secondary"
                   className="cursor-pointer bg-neutral-400/25 hover:bg-neutral-400/50"
                 >
-                  {tag}
+                  {tag.label}
                 </Badge>
               </Link>
             ))}
