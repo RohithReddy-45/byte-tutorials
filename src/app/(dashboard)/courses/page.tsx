@@ -5,13 +5,13 @@ import {
   getYoutubeDetailsPaginated,
 } from "@/lib/queries";
 import type { YoutubeDetails } from "@/lib/types";
+import { getCurrentSession } from "@/lib/validate-request";
 import type { Metadata } from "next";
+import { redirect } from "next/navigation";
+import { Suspense } from "react";
 import CourseSection from "./_components/course-section";
 import PageNavigation from "./_components/page-navigation";
-import { Suspense } from "react";
 import { PulseLoader } from "./_components/pulse-loader";
-import { getCurrentSession } from "@/lib/validate-request";
-import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Browse Courses",
