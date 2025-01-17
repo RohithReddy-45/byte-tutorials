@@ -8,7 +8,9 @@ interface WatchlistSectionProps {
   courses: YoutubeDetails[];
 }
 
-export default async function WatchlistSection({ courses }: WatchlistSectionProps) {
+export default async function WatchlistSection({
+  courses,
+}: WatchlistSectionProps) {
   const { user } = await getCurrentSession();
 
   if (!user) {
@@ -19,7 +21,7 @@ export default async function WatchlistSection({ courses }: WatchlistSectionProp
     return <span>No videos found</span>;
   }
 
-  const watchlist = await getUserWatchlist(user.id)
+  const watchlist = await getUserWatchlist(user.id);
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
