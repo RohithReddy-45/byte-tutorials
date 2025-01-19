@@ -20,6 +20,7 @@ export async function fetchVideoInfo(videoId: string): Promise<VideoInfo> {
     const data = await response.json();
 
     if (!data.items || data.items.length === 0) {
+      throw new Error("No video data found");
     }
 
     const snippet = data.items[0].snippet;
