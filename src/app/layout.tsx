@@ -58,6 +58,13 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       {/* <script src="https://unpkg.com/react-scan/dist/auto.global.js" async />*/}
+      <head>
+        <script
+          defer
+          src="https://cloud.umami.is/script.js"
+          data-website-id="4accbd25-5fed-4cff-bfcf-81ea7df9d3c5"
+        />
+      </head>
       <body className={cn("antialiased bg-background", inter.className)}>
         <ThemeProvider
           attribute="class"
