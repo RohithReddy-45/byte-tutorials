@@ -117,7 +117,7 @@ export default function CourseCard({
 
   return (
     <>
-      <Card className="overflow-hidden rounded-lg border-none transition-all duration-300 shadow-md hover:shadow-lg bg-accent/50">
+      <Card className="overflow-hidden rounded-lg border-none transition-all duration-300 drop-shadow-md hover:shadow-lg dark:bg-accent/50">
         <div
           className="group relative cursor-pointer"
           onClick={toggleExpand}

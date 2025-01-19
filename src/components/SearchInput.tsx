@@ -1,11 +1,28 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import { Input } from "@/components/ui/input";
 import { useParams } from "@/helpers/search-params";
-import { SearchIcon } from "lucide-react";
+import { DynamicLoader } from "./DynamicLoader";
 
 export default function SearchInput() {
   const { q, setParams } = useParams();
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    if (loading) {
+      const timer = setTimeout(() => {
+        setLoading(false);
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setLoading(true);
+    setParams({ q: e.target.value });
+  };
 
   return (
     <form
@@ -19,14 +36,15 @@ export default function SearchInput() {
     >
       <Input
         value={q ?? ""}
-        onChange={(e) => setParams({ q: e.target.value })}
+        onChange={handleInputChange}
         placeholder="Search..."
         className="w-full pl-10"
         name="q"
       />
-      <SearchIcon
-        size={20}
-        className="absolute top-2.5 left-2 stroke-gray-400"
+      <DynamicLoader
+        isLoading={loading}
+        size="sm"
+        className="absolute top-[13px] left-3"
       />
     </form>
   );
