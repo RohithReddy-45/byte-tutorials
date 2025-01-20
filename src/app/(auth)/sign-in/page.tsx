@@ -6,8 +6,10 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { getCurrentSession } from "@/lib/validate-request";
 import type { Metadata } from "next";
 import { FaGithub } from "react-icons/fa6";
+import { redirect } from "next/navigation";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -22,6 +24,9 @@ export default async function AuthPage(props: {
 }) {
   const searchParams = await props.searchParams;
   const error = searchParams.error as string;
+
+  const { user } = await getCurrentSession();
+  if (user) redirect("/courses");
 
   return (
     <div className="min-h-screen flex items-center justify-center px-4 py-12">

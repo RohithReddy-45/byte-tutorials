@@ -21,9 +21,7 @@ export const metadata: Metadata = {
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-export default async function Dashboard(props: {
-  searchParams: SearchParams;
-}) {
+export default async function Dashboard(props: { searchParams: SearchParams }) {
   const searchParams = await props.searchParams;
   const page = searchParams.page
     ? Number.parseInt(searchParams.page as string)

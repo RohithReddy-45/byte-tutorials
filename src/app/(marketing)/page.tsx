@@ -9,6 +9,7 @@ import FeaturesSection from "./_components/Features";
 export default async function Home() {
   const { user } = await getCurrentSession();
   if (user) redirect("/courses");
+
   return (
     <>
       <div className="fixed left-0 top-0 h-full w-full backdrop-blur-3xl bg-white dark:bg-gray-900 overflow-hidden">

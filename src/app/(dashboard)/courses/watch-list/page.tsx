@@ -20,7 +20,7 @@ export default async function WatchlistPage(props: {
   const session = await getCurrentSession();
 
   if (!session.user) {
-    redirect("/login");
+    redirect("/sign-in");
   }
 
   const searchParams = await props.searchParams;

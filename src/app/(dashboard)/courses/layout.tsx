@@ -1,5 +1,4 @@
 import { getCurrentSession } from "@/lib/validate-request";
-import { redirect } from "next/navigation";
 import SessionProvider from "@/providers/SessionProvider";
 import Logo from "@/components/Logo";
 import { ModeToggle } from "@/components/ModeToggle";
@@ -10,9 +9,11 @@ import { TechFilter } from "@/components/ui/select-with-search";
 
 export default async function DashboardLayout({
   children,
-}: { children: React.ReactNode }) {
+}: {
+  children: React.ReactNode;
+}) {
   const session = await getCurrentSession();
-  if (!session.user) redirect("/sign-in");
+  if (!session.user) return null;
 
   return (
     <SessionProvider value={session}>

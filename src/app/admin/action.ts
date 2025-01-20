@@ -1,7 +1,7 @@
 "use server";
 
 import { getCurrentSession } from "@/lib/validate-request";
-import { revalidatePath } from "next/cache";
+import { revalidatePath, revalidateTag } from "next/cache";
 import { globalPOSTRateLimit } from "@/lib/request";
 import { saveYoutubeDetails } from "@/lib/queries";
 import { VideoSchema, type YoutubeValues } from "@/lib/types";
@@ -27,6 +27,7 @@ export async function adminFormAction(formData: YoutubeValues) {
       throw new Error(result.error);
     }
     revalidatePath("/courses");
+    revalidateTag("youtube-details");
     return {
       success: result.success,
     };
