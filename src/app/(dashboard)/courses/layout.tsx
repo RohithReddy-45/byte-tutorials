@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation"
 import { getCurrentSession } from "@/lib/validate-request";
 import SessionProvider from "@/providers/SessionProvider";
 import Logo from "@/components/Logo";
@@ -13,7 +14,9 @@ export default async function DashboardLayout({
   children: React.ReactNode;
 }) {
   const session = await getCurrentSession();
-  if (!session.user) return null;
+  if (!session.user) {
+    redirect("/sign-in")
+  }
 
   return (
     <SessionProvider value={session}>

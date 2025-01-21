@@ -44,7 +44,7 @@ export default function SearchInput() {
       <DynamicLoader
         isLoading={loading}
         size="sm"
-        className="absolute top-[13px] left-3"
+        className="absolute top-3 left-3"
       />
     </form>
   );

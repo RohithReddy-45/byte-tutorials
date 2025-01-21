@@ -21,6 +21,7 @@ export default function PageNavigation({
   const { setParams } = useParams();
 
   const handlePageChange = (newPage: number) => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
     setParams({ page: newPage });
   };
 
