@@ -5,6 +5,7 @@ import { ThemeProvider } from "@/providers/ThemeProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import ProgressProvider from "@/providers/ProgressProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -66,15 +67,17 @@ export default function RootLayout({
         />
       </head>
       <body className={cn("antialiased bg-background", inter.className)}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          <NuqsAdapter>{children}</NuqsAdapter>
-          <Toaster />
-        </ThemeProvider>
+        <ProgressProvider>
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <NuqsAdapter>{children}</NuqsAdapter>
+            <Toaster />
+          </ThemeProvider>
+        </ProgressProvider>
       </body>
     </html>
   );
