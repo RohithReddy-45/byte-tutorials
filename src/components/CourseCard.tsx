@@ -130,7 +130,7 @@ export default function CourseCard({
           tabIndex={0}
         >
           <Image
-            src={`https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`}
+            src={`https://img.youtube.com/vi/${videoId}/hqdefault.jpg`}
             alt={title}
             width={1280}
             height={720}
@@ -178,7 +178,7 @@ export default function CourseCard({
         <CardFooter className="p-3 pt-0 text-sm">
           <div className="flex flex-wrap gap-1">
             {tags.map((tag) => (
-              <Link key={tag.slug} href={`?tech=${tag.slug}`}>
+              <Link key={tag.slug} href={`?tech=${encodeURIComponent(tag.slug)}`}>
                 <Badge
                   variant="secondary"
                   className="cursor-pointer bg-neutral-400/25 hover:bg-neutral-400/50"

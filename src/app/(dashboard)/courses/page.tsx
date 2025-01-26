@@ -95,7 +95,7 @@ export default async function Dashboard(props: { searchParams: SearchParams }) {
           }
         >
           <CourseSection courses={coursesData.data} />
-          {coursesData.total >= PER_PAGE && (
+          {coursesData.total > PER_PAGE && (
             <PageNavigation totalPages={totalPages} currentPage={page} />
           )}
         </Suspense>

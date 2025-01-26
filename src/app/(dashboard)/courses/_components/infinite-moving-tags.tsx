@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { technologies } from "@/constants/constants";
-import { useParams } from "@/helpers/search-params";
+import Link from "next/link";
 
 interface InfiniteMovingTagsProps extends React.HTMLAttributes<HTMLDivElement> {
   direction?: "left" | "right";
@@ -18,9 +18,6 @@ export function InfiniteMovingTags({
   className,
   ...props
 }: InfiniteMovingTagsProps) {
-  const { tech, setParams } = useParams();
-  const selectedTech = tech ? tech.split(",") : [];
-
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollerRef = useRef<HTMLUListElement>(null);
   const [start, setStart] = useState(false);
@@ -45,19 +42,6 @@ export function InfiniteMovingTags({
       getSpeed();
     }
   }
-
-  const handleClick = (
-    e:
-      | React.MouseEvent<HTMLButtonElement>
-      | React.KeyboardEvent<HTMLButtonElement>,
-    newTech: string,
-  ) => {
-    e.preventDefault();
-    if (!selectedTech.includes(newTech)) {
-      const updatedTech = [...selectedTech, newTech];
-      setParams({ tech: updatedTech.join(",") });
-    }
-  };
 
   const getDirection = () => {
     if (containerRef.current) {
@@ -106,15 +90,14 @@ export function InfiniteMovingTags({
       >
         {technologies.map((item) => (
           <li key={item.slug}>
-            <button
-              type="button"
-              onClick={(e) => {
-                handleClick(e, item.slug);
-              }}
-              className="w-max max-w-full flex-shrink-0 rounded-full px-2 py-1 text-xs text-white font-medium cursor-pointer bg-blue-600"
-            >
-              {item.label}
-            </button>
+            <Link href={`?tech=${encodeURIComponent(item.slug)}`}>
+              <button
+                type="button"
+                className="w-max max-w-full flex-shrink-0 rounded-full px-2 py-1 text-xs text-white font-medium cursor-pointer bg-blue-600"
+              >
+                {item.label}
+              </button>
+            </Link>
           </li>
         ))}
       </ul>

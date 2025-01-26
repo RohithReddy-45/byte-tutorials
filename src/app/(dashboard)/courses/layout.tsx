@@ -1,4 +1,4 @@
-import { redirect } from "next/navigation"
+import { redirect } from "next/navigation";
 import { getCurrentSession } from "@/lib/validate-request";
 import SessionProvider from "@/providers/SessionProvider";
 import Logo from "@/components/Logo";
@@ -15,7 +15,7 @@ export default async function DashboardLayout({
 }) {
   const session = await getCurrentSession();
   if (!session.user) {
-    redirect("/sign-in")
+    redirect("/sign-in");
   }
 
   return (
