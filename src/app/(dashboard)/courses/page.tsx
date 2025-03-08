@@ -85,6 +85,9 @@ export default async function Dashboard(props: { searchParams: SearchParams }) {
   return (
     <div className="flex flex-col flex-1 gap-5 lg:flex-row">
       <div className="w-full overflow-auto pb-7">
+        {query?.length > 0 && coursesData.total > 0 ? (
+          <h1 className="text-xl mt-2 mb-4">Search results for "{query}"</h1>
+        ) : null}
         <Suspense
           fallback={
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">

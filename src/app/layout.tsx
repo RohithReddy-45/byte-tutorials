@@ -1,11 +1,11 @@
-import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { Toaster } from "@/components/ui/toaster";
 import { cn } from "@/lib/utils";
+import ProgressProvider from "@/providers/ProgressProvider";
 import { ThemeProvider } from "@/providers/ThemeProvider";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
-import ProgressProvider from "@/providers/ProgressProvider";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {

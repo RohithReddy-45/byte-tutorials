@@ -49,7 +49,7 @@ export default function Avatar() {
               </svg>
             </div>
           )}
-          <div className="font-medium line-clamp-1 min-w-max hidden sm:block">
+          <div className="font-medium line-clamp-1 min-w-max hidden sm:block" data-testid="user-avatar">
             {user.displayName}
           </div>
         </div>

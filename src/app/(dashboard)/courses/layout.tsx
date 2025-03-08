@@ -1,12 +1,12 @@
-import { redirect } from "next/navigation";
-import { getCurrentSession } from "@/lib/validate-request";
-import SessionProvider from "@/providers/SessionProvider";
+import Avatar from "@/components/Avatar";
 import Logo from "@/components/Logo";
 import { ModeToggle } from "@/components/ModeToggle";
-import Avatar from "@/components/Avatar";
 import SearchInput from "@/components/SearchInput";
-import { InfiniteMovingTags } from "./_components/infinite-moving-tags";
 import { TechFilter } from "@/components/ui/select-with-search";
+import { getCurrentSession } from "@/lib/validate-request";
+import SessionProvider from "@/providers/SessionProvider";
+import { redirect } from "next/navigation";
+import { InfiniteMovingTags } from "./_components/infinite-moving-tags";
 
 export default async function DashboardLayout({
   children,
@@ -20,7 +20,7 @@ export default async function DashboardLayout({
 
   return (
     <SessionProvider value={session}>
-      <div className="container flex flex-col gap-5 px-3 sm:px-6 py-3 mx-auto leading-6 h-dvh">
+      <div className="container flex flex-col gap-4 px-3 sm:px-6 py-3 mx-auto leading-6 h-dvh">
         <div className="flex items-center justify-between gap-3">
           <div className="flex items-center justify-between w-full">
             <Logo href="/courses" />

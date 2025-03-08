@@ -3,7 +3,7 @@ import { z } from "zod";
 
 export const env = createEnv({
   server: {
-    NODE_ENV: z.string().min(1),
+    NODE_ENV: z.string(),
     LOCAL_URL: z.string().url(),
     PRODUCTION_URL: z.string().url(),
     GOOGLE_CLIENT_ID: z.string().min(1),

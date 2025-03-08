@@ -7,7 +7,7 @@ import PageNavigation from "../_components/page-navigation";
 import WatchlistSection from "../_components/watchlist-section";
 
 export const metadata: Metadata = {
-  title: "Your Watchlist",
+  title: "Watchlist",
   description:
     "Manage and track your saved programming tutorials and tech courses",
 };
@@ -58,7 +58,10 @@ export default async function WatchlistPage(props: {
 
   return (
     <>
-      <h1 className="text-2xl font-medium">My Watchlist</h1>
+      <h1 className="text-2xl font-medium">Watchlist</h1>
+      {query?.length > 0 && coursesData.total > 0 ? (
+        <h2 className="text-xl mb-4">Search results for "{query}"</h2>
+      ) : null}
       <div className="flex flex-col flex-1 gap-5 lg:flex-row">
         <div className="w-full overflow-auto pb-7">
           <WatchlistSection

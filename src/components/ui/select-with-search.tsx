@@ -106,6 +106,7 @@ function TechFilter() {
           return (
             <Badge
               key={val}
+              data-testid={`tag-${val}`}
               variant="secondary"
               className="flex items-center gap-1"
             >

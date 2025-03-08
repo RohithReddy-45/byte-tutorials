@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/card";
 import { getCurrentSession } from "@/lib/validate-request";
 import type { Metadata } from "next";
-import { FaGithub } from "react-icons/fa6";
 import { redirect } from "next/navigation";
+import { FaGithub } from "react-icons/fa6";
 
 export const metadata: Metadata = {
   title: "Sign In",
@@ -19,9 +19,7 @@ export const metadata: Metadata = {
 
 type SearchParams = Promise<{ [key: string]: string | string[] | undefined }>;
 
-export default async function AuthPage(props: {
-  searchParams: SearchParams;
-}) {
+export default async function AuthPage(props: { searchParams: SearchParams }) {
   const searchParams = await props.searchParams;
   const error = searchParams.error as string;
 

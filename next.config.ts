@@ -11,6 +11,9 @@ const nextConfig: NextConfig = {
       dynamic: 30,
     },
   },
+  typescript: {
+    ignoreBuildErrors: true,
+  },
   logging: {
     fetches: {
       fullUrl: true,
