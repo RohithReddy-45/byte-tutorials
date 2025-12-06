@@ -6,6 +6,9 @@
     "useIgnoreFile": true,
     "defaultBranch": "main"
   },
+  "files": {
+    "ignore": ["./src/components/ui/**", "./src/db/migrations/**"]
+  },
   "formatter": {
     "enabled": true,
     "formatWithErrors": false,
@@ -23,6 +26,16 @@
   "linter": {
     "enabled": true,
     "rules": {
+      "nursery": {
+        "useSortedClasses": {
+          "level": "error",
+          "fix": "safe",
+          "options": {
+            "attributes": ["className", "class"],
+            "functions": ["cn", "clsx", "twMerge"]
+          }
+        }
+      },
       "recommended": true,
       "a11y": {
         "noSvgWithoutTitle": "off"
