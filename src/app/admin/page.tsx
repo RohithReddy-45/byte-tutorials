@@ -18,8 +18,10 @@ export default async function AdminPage() {
   }
 
   return (
-    <div className="flex items-center justify-center max-w-[400px] mx-auto h-screen">
-      <AdminForm />
+    <div className="flex items-start justify-center max-w-3xl mx-auto py-12 min-h-screen">
+      <div className="w-full bg-card border border-slate-200 dark:border-slate-800 rounded-xl p-6 shadow-sm">
+        <AdminForm />
+      </div>
     </div>
   );
 }
