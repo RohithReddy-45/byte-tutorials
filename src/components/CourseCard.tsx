@@ -18,15 +18,24 @@ import { Badge } from "./ui/badge";
 import { Button } from "./ui/button";
 import { Card, CardContent, CardFooter } from "./ui/card";
 
+import StudyWorkspace from "./StudyWorkspace";
+
 export default function CourseCard({
   courses,
   initialIsBookmarked,
+  initialProgress,
 }: {
   courses: YoutubeDetails;
   initialIsBookmarked: boolean;
+  initialProgress?: {
+    lastPosition: number;
+    duration: number;
+    status: "not_started" | "in_progress" | "completed";
+  } | null;
 }) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(initialIsBookmarked);
+  const [progress, setProgress] = useState(initialProgress);
   const [isPending, startTransition] = useTransition();
   const { toast } = useToast();
   const { videoId, title, tags, creatorUrl, creator } = courses;
@@ -89,37 +98,15 @@ export default function CourseCard({
     };
   }, [isExpanded]);
 
-  const VideoPlayer = () => (
-    <div className="relative w-full h-full">
-      <iframe
-        id="player"
-        key={videoId}
-        width="100%"
-        height="100%"
-        src={`https://www.youtube.com/embed/${videoId}?autoplay=1&enablejsapi=1&origin=${window.location.origin}&playsinline=1&controls=1`}
-        title={title}
-        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-        referrerPolicy="strict-origin-when-cross-origin"
-        allowFullScreen
-        className="absolute inset-0"
-      />
-      <Button
-        variant="ghost"
-        size="icon"
-        onClick={toggleExpand}
-        className="absolute right-4 -top-6 z-20 bg-black/70 hover:bg-black-70"
-        aria-label="Close video"
-      >
-        <X className="size-6 text-white" />
-      </Button>
-    </div>
-  );
+  const percent = progress && progress.duration > 0
+    ? Math.min(100, Math.floor((progress.lastPosition / progress.duration) * 100))
+    : 0;
 
   return (
     <>
       <Card className="overflow-hidden rounded-lg border-none transition-all duration-300 drop-shadow-md hover:shadow-lg dark:bg-accent/50">
         <div
-          className="group relative cursor-pointer"
+          className="group relative cursor-pointer overflow-hidden"
           onClick={toggleExpand}
           onKeyDown={(e) => {
             if (e.key === "Enter" || e.key === " ") {
@@ -138,9 +125,31 @@ export default function CourseCard({
             blurDataURL={`https://img.youtube.com/vi/${videoId}/sddefault.jpg`}
             className="aspect-video h-auto w-full object-cover"
           />
-          <div className="absolute inset-0 flex items-center justify-center rounded-lg bg-black bg-opacity-0 transition-all duration-300 group-hover:bg-opacity-30">
+          <div className="absolute inset-0 flex items-center justify-center bg-black bg-opacity-0 transition-all duration-300 group-hover:bg-opacity-30">
             <Play className="size-16 border-0 fill-white stroke-white opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
           </div>
+          
+          {/* Status Badge */}
+          {progress?.status === "completed" && (
+            <span className="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-500 text-emerald-950 uppercase tracking-wider shadow z-10">
+              Completed
+            </span>
+          )}
+          {progress?.status === "in_progress" && (
+            <span className="absolute top-2 left-2 px-2 py-0.5 rounded text-[10px] font-bold bg-amber-500 text-amber-950 uppercase tracking-wider shadow z-10">
+              In Progress
+            </span>
+          )}
+
+          {/* Progress Bar overlay */}
+          {percent > 0 && (
+            <div className="absolute bottom-0 left-0 right-0 h-1.5 bg-slate-800/80">
+              <div
+                className="h-full bg-emerald-500 transition-all duration-300"
+                style={{ width: `${percent}%` }}
+              />
+            </div>
+          )}
         </div>
         <CardContent className="space-y-2 px-3 py-1">
           <div className="flex items-center justify-between">
@@ -190,20 +199,59 @@ export default function CourseCard({
           </div>
         </CardFooter>
       </Card>
+      
       {isMobile ? (
         isExpanded && (
-          <div className="fixed inset-0 pt-10 z-50 bg-black">
-            <VideoPlayer />
+          <div className="fixed inset-0 z-50 bg-background text-foreground flex flex-col p-4 pt-12 overflow-y-auto">
+            <div className="flex justify-end mb-2">
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={toggleExpand}
+                className="bg-black/50 text-white"
+              >
+                <X className="size-6" />
+              </Button>
+            </div>
+            <div className="flex-1 h-full">
+              <StudyWorkspace
+                videoId={videoId}
+                title={title}
+                creator={creator}
+                onClose={() => setIsExpanded(false)}
+                onProgressUpdate={(pct, stat) => {
+                  setProgress({
+                    lastPosition: Math.floor((pct / 100) * (progress?.duration || 100)),
+                    duration: progress?.duration || 100,
+                    status: stat as "not_started" | "in_progress" | "completed",
+                  });
+                }}
+              />
+            </div>
           </div>
         )
       ) : (
         <Dialog open={isExpanded} onOpenChange={setIsExpanded}>
-          <DialogTitle className="sr-only">Youtube video player </DialogTitle>
+          <DialogTitle className="sr-only">Course Study Workspace</DialogTitle>
           <DialogDescription className="sr-only">
-            Youtube video player
+            Interactive side-by-side study workspace with notes and progress tracking
           </DialogDescription>
-          <DialogContent className="sm:max-w-[90vw] bg-black h-[90vh] border-0 p-0">
-            <VideoPlayer />
+          <DialogContent className="max-w-[95vw] lg:max-w-[1200px] h-[90vh] bg-transparent border-0 p-0 overflow-hidden shadow-none">
+            <div className="relative w-full h-full">
+              <StudyWorkspace
+                videoId={videoId}
+                title={title}
+                creator={creator}
+                onClose={() => setIsExpanded(false)}
+                onProgressUpdate={(pct, stat) => {
+                  setProgress({
+                    lastPosition: Math.floor((pct / 100) * (progress?.duration || 100)),
+                    duration: progress?.duration || 100,
+                    status: stat as "not_started" | "in_progress" | "completed",
+                  });
+                }}
+              />
+            </div>
           </DialogContent>
         </Dialog>
       )}

@@ -9,13 +9,10 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { useSession } from "@/providers/SessionProvider";
 import Image from "next/image";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 export default function Avatar() {
   const { user } = useSession();
-  const pathName = usePathname();
   const [isOpen, setIsOpen] = useState(false);
 
   if (!user) return null;
@@ -55,14 +52,6 @@ export default function Avatar() {
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="border-[1px] dark:border-neutral-700 mt-3">
-        <DropdownMenuItem>
-          <Link
-            href={`/courses${pathName === "/courses" ? "/watch-list" : ""}`}
-            onClick={() => setIsOpen(false)}
-          >
-            {pathName === "/courses" ? "Watchlist" : "Courses"}
-          </Link>
-        </DropdownMenuItem>
         <DropdownMenuItem>
           <form
             onSubmit={async (e) => {

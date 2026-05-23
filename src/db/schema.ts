@@ -117,6 +117,114 @@ export const watchListRelations = relations(watchListTable, ({ one }) => ({
   }),
 }));
 
+export const videoProgressTable = sqliteTable(
+  "video_progress",
+  {
+    id: t.text("id").primaryKey(),
+    userId: t
+      .text("user_id")
+      .notNull()
+      .references(() => users.id, { onDelete: "cascade" }),
+    videoId: t
+      .text("video_id")
+      .notNull()
+      .references(() => youtubeDetailsTable.videoId, { onDelete: "cascade" }),
+    lastPosition: t.integer("last_position").notNull().default(0), // in seconds
+    duration: t.integer("duration").notNull().default(0), // in seconds
+    status: t
+      .text("status")
+      .$type<"not_started" | "in_progress" | "completed">()
+      .notNull()
+      .default("not_started"),
+    updatedAt: t.text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+  },
+  (table) => {
+    return {
+      uniqueUserVideoProgress: t
+        .uniqueIndex("unique_user_video_progress")
+        .on(table.userId, table.videoId),
+    };
+  },
+);
+
+export const videoProgressRelations = relations(videoProgressTable, ({ one }) => ({
+  user: one(users, {
+    fields: [videoProgressTable.userId],
+    references: [users.id],
+  }),
+  video: one(youtubeDetailsTable, {
+    fields: [videoProgressTable.videoId],
+    references: [youtubeDetailsTable.videoId],
+  }),
+}));
+
+export const videoNotesTable = sqliteTable("video_notes", {
+  id: t.text("id").primaryKey(),
+  userId: t
+    .text("user_id")
+    .notNull()
+    .references(() => users.id, { onDelete: "cascade" }),
+  videoId: t
+    .text("video_id")
+    .notNull()
+    .references(() => youtubeDetailsTable.videoId, { onDelete: "cascade" }),
+  noteText: t.text("note_text").notNull(),
+  timestamp: t.integer("timestamp").notNull(), // position in seconds
+  createdAt: t.text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
+  updatedAt: t.text("updated_at").default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const videoNotesRelations = relations(videoNotesTable, ({ one }) => ({
+  user: one(users, {
+    fields: [videoNotesTable.userId],
+    references: [users.id],
+  }),
+  video: one(youtubeDetailsTable, {
+    fields: [videoNotesTable.videoId],
+    references: [youtubeDetailsTable.videoId],
+  }),
+}));
+
+export const playlistsTable = sqliteTable("playlists", {
+  id: t.text("id").primaryKey(),
+  title: t.text("title").notNull(),
+  description: t.text("description"),
+  slug: t.text("slug").notNull().unique(),
+  createdAt: t.text("created_at").notNull().default(sql`(CURRENT_TIMESTAMP)`),
+});
+
+export const playlistsRelations = relations(playlistsTable, ({ many }) => ({
+  playlistVideos: many(playlistVideosTable),
+}));
+
+export const playlistVideosTable = sqliteTable("playlist_videos", {
+  id: t.text("id").primaryKey(),
+  playlistId: t
+    .text("playlist_id")
+    .notNull()
+    .references(() => playlistsTable.id, { onDelete: "cascade" }),
+  videoId: t
+    .text("video_id")
+    .notNull()
+    .references(() => youtubeDetailsTable.videoId, { onDelete: "cascade" }),
+  orderIndex: t.integer("order_index").notNull(),
+});
+
+export const playlistVideosRelations = relations(playlistVideosTable, ({ one }) => ({
+  playlist: one(playlistsTable, {
+    fields: [playlistVideosTable.playlistId],
+    references: [playlistsTable.id],
+  }),
+  video: one(youtubeDetailsTable, {
+    fields: [playlistVideosTable.videoId],
+    references: [youtubeDetailsTable.videoId],
+  }),
+}));
+
 export type User = typeof users.$inferSelect;
 export type Session = typeof sessions.$inferSelect;
 export type YoutubeDetailsSchema = typeof youtubeDetailsTable.$inferSelect;
+export type VideoProgress = typeof videoProgressTable.$inferSelect;
+export type VideoNote = typeof videoNotesTable.$inferSelect;
+export type Playlist = typeof playlistsTable.$inferSelect;
+export type PlaylistVideo = typeof playlistVideosTable.$inferSelect;

@@ -1,12 +1,10 @@
 import Avatar from "@/components/Avatar";
 import Logo from "@/components/Logo";
 import { ModeToggle } from "@/components/ModeToggle";
-import SearchInput from "@/components/SearchInput";
-import { TechFilter } from "@/components/ui/select-with-search";
 import { getCurrentSession } from "@/lib/validate-request";
 import SessionProvider from "@/providers/SessionProvider";
 import { redirect } from "next/navigation";
-import { InfiniteMovingTags } from "./_components/infinite-moving-tags";
+import DashboardHeader from "./_components/dashboard-header";
 
 export default async function DashboardLayout({
   children,
@@ -30,11 +28,7 @@ export default async function DashboardLayout({
             <Avatar />
           </div>
         </div>
-        <SearchInput />
-        <TechFilter />
-        <div className="w-full">
-          <InfiniteMovingTags direction="right" speed="slow" />
-        </div>
+        <DashboardHeader />
         {children}
       </div>
     </SessionProvider>

@@ -3,6 +3,7 @@ import { getUserWatchlist } from "@/lib/queries";
 import type { YoutubeDetails } from "@/lib/types";
 import { getCurrentSession } from "@/lib/validate-request";
 import { redirect } from "next/navigation";
+import { getAllVideoProgress } from "@/app/(dashboard)/courses/actions/progress-action";
 
 interface CourseSectionProps {
   courses: YoutubeDetails[];
@@ -24,16 +25,22 @@ export default async function CourseSection({ courses }: CourseSectionProps) {
   }
 
   const watchlistVideoIds = await getUserWatchlist(user.id);
+  const progressRes = await getAllVideoProgress();
+  const progressList = progressRes.success && progressRes.data ? progressRes.data : [];
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
-      {courses.map((course) => (
-        <CourseCard
-          key={course.id}
-          courses={course}
-          initialIsBookmarked={watchlistVideoIds.includes(course.videoId)}
-        />
-      ))}
+      {courses.map((course) => {
+        const videoProgress = progressList.find((p) => p.videoId === course.videoId);
+        return (
+          <CourseCard
+            key={course.id}
+            courses={course}
+            initialIsBookmarked={watchlistVideoIds.includes(course.videoId)}
+            initialProgress={videoProgress}
+          />
+        );
+      })}
     </div>
   );
 }
