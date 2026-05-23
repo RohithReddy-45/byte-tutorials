@@ -6,6 +6,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import "./globals.css";
+import { Analytics } from "@vercel/analytics/next";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
@@ -74,7 +75,10 @@ export default function RootLayout({
             enableSystem
             disableTransitionOnChange
           >
-            <NuqsAdapter>{children}</NuqsAdapter>
+            <NuqsAdapter>
+              {children}
+              <Analytics />
+            </NuqsAdapter>
             <Toaster />
           </ThemeProvider>
         </ProgressProvider>
