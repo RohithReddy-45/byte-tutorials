@@ -51,3 +51,4 @@ node_modules/
 /playwright/.auth/
 state.json
 storageState.base64
+pnpm-workspace.yaml
