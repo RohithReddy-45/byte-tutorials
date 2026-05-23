@@ -4,8 +4,9 @@ import { getPlaylists } from "@/app/(dashboard)/courses/actions/playlist-action"
 import { ArrowRight, BookOpen, Compass, CheckCircle } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
 
-export const metadata = {
+export const metadata: Metadata = {
   title: "Curated Learning Paths",
   description: "Follow curated paths to build your developer skills systematically, with progress tracking.",
 };
@@ -44,7 +45,7 @@ export default async function PathsPage() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {playlists.map((path) => {
-          const completionRate = path.totalVideos > 0 
+          const completionRate = path.totalVideos > 0
             ? Math.round((path.completedVideos / path.totalVideos) * 100)
             : 0;
 

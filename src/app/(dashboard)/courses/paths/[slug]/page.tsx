@@ -6,6 +6,7 @@ import CourseCard from "@/components/CourseCard";
 import { Compass, BookOpen, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import type { Metadata } from "next";
 
 interface PathDetailsPageProps {
   params: Promise<{ slug: string }>;

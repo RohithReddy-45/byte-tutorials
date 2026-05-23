@@ -8,7 +8,6 @@ interface StudyHeatmapProps {
 }
 
 export default function StudyHeatmap({ data }: StudyHeatmapProps) {
-  // Map data to quick lookup
   const dataMap = useMemo(() => {
     const map = new Map<string, number>();
     for (const d of data) {
@@ -17,20 +16,16 @@ export default function StudyHeatmap({ data }: StudyHeatmapProps) {
     return map;
   }, [data]);
 
-  // Generate grid for past 16 weeks (112 days) ending today
   const grid = useMemo(() => {
     const result: Array<{ dateStr: string; count: number; level: number; dayOfWeek: number }> = [];
     const today = new Date();
-    
-    // Find the start date: 16 weeks ago, aligned to the start of the week (Sunday = 0)
+
     const startDate = new Date(today);
     startDate.setDate(today.getDate() - 16 * 7);
-    
-    // Align startDate to Sunday of that week
+
     const currentDay = startDate.getDay();
     startDate.setDate(startDate.getDate() - currentDay);
 
-    // Generate days from startDate to today
     const tempDate = new Date(startDate);
     const endTime = new Date(today).setHours(23, 59, 59, 999);
 
@@ -41,8 +36,7 @@ export default function StudyHeatmap({ data }: StudyHeatmapProps) {
       const dateStr = `${year}-${month}-${dateVal}`;
 
       const count = dataMap.get(dateStr) || 0;
-      
-      // Determine intensity level (0 to 4)
+
       let level = 0;
       if (count > 0 && count <= 2) level = 1;
       else if (count > 2 && count <= 5) level = 2;
@@ -59,7 +53,6 @@ export default function StudyHeatmap({ data }: StudyHeatmapProps) {
       tempDate.setDate(tempDate.getDate() + 1);
     }
 
-    // Group into weeks (each week has 7 days)
     const weeks: Array<typeof result> = [];
     let currentWeek: typeof result = [];
 
@@ -79,8 +72,7 @@ export default function StudyHeatmap({ data }: StudyHeatmapProps) {
 
   // Weekday labels
   const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
-  
-  // Format Date for tooltips
+
   const formatDateLabel = (dateStr: string) => {
     const options: Intl.DateTimeFormatOptions = { weekday: "short", month: "short", day: "numeric", year: "numeric" };
     return new Date(dateStr).toLocaleDateString("en-US", options);
@@ -116,7 +108,7 @@ export default function StudyHeatmap({ data }: StudyHeatmapProps) {
                   "bg-emerald-500 dark:bg-emerald-600/80 border-emerald-600 dark:border-emerald-500/30 hover:bg-emerald-600 dark:hover:bg-emerald-500/80", // level 3
                   "bg-emerald-700 dark:bg-emerald-400 border-emerald-800 dark:border-emerald-300 hover:bg-emerald-800 dark:hover:bg-emerald-300", // level 4
                 ];
-                
+
                 return (
                   <div
                     key={day.dateStr}

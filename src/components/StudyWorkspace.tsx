@@ -34,14 +34,12 @@ export default function StudyWorkspace({
   const [manualProgressSyncing, setManualProgressSyncing] = useState(false);
   const [status, setStatus] = useState<"not_started" | "in_progress" | "completed">("not_started");
 
-  // YouTube player references & state tracking refs (to prevent stale closures)
   const playerRef = useRef<any>(null);
   const progressIntervalRef = useRef<NodeJS.Timeout | null>(null);
   const currentTimeRef = useRef(0);
   const durationRef = useRef(0);
   const latestPositionRef = useRef(0);
 
-  // Format seconds to MM:SS
   const formatTime = (seconds: number) => {
     const h = Math.floor(seconds / 3600);
     const m = Math.floor((seconds % 3600) / 60);
@@ -52,7 +50,6 @@ export default function StudyWorkspace({
     return `${m.toString().padStart(2, "0")}:${s.toString().padStart(2, "0")}`;
   };
 
-  // Fetch initial progress and notes
   useEffect(() => {
     async function loadInitialData() {
       try {
@@ -71,7 +68,7 @@ export default function StudyWorkspace({
           setCurrentTime(lastPos);
           currentTimeRef.current = lastPos;
           latestPositionRef.current = lastPos;
-          
+
           // Seek if player is ready
           if (playerRef.current && typeof playerRef.current.seekTo === "function") {
             playerRef.current.seekTo(lastPos, true);
@@ -83,8 +80,7 @@ export default function StudyWorkspace({
         setLoadingNotes(false);
       }
     }
-    
-    // Reset position refs on videoId change
+
     currentTimeRef.current = 0;
     latestPositionRef.current = 0;
     durationRef.current = 0;
@@ -92,13 +88,11 @@ export default function StudyWorkspace({
     setDuration(0);
     setPlayerReady(false);
     setStatus("not_started");
-    
+
     loadInitialData();
   }, [videoId]);
 
-  // YouTube API Script loading and Player initialization
   useEffect(() => {
-    // 1. Ensure global YT script is loaded
     if (!window.YT) {
       const tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
@@ -131,7 +125,6 @@ export default function StudyWorkspace({
     };
 
     const initPlayer = () => {
-      // Re-create player target div to avoid mounting conflicts
       const wrapper = document.getElementById("youtube-study-player-wrapper");
       if (wrapper) {
         wrapper.innerHTML = '<div id="youtube-study-player-container" class="absolute inset-0 h-full w-full border-0"></div>';
@@ -155,7 +148,7 @@ export default function StudyWorkspace({
       playerRef.current = playerInstance;
     };
 
-    if (window.YT && window.YT.Player) {
+    if (window.YT?.Player) {
       initPlayer();
     } else {
       const previousCallback = window.onYouTubeIframeAPIReady;
@@ -241,7 +234,7 @@ export default function StudyWorkspace({
         toast({
           description: "Note added successfully!",
         });
-        
+
         // Trigger progress sync to reflect activity in DB
         if (playerRef.current) {
           syncProgress(playerRef.current);
