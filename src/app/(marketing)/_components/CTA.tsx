@@ -1,22 +1,31 @@
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 export default function CTA() {
   return (
-    <section className="flex h-fit flex-col max-w-7xl container mx-auto gap-2 px-3 py-10 mt-16 text-center leading-6 sm:px-20">
-      <div className="relative flex justify-between gap-y-10 xl:flex-row items-center text-start rounded-lg max-h-fit w-full flex-col bg-background/70 px-8 py-16 sm:px-16 lg:py-32 h-full bg-gray-900 bg-clip-padding backdrop-filter backdrop-blur-lg bg-opacity-5 border dark:border-indigo-700/50 border-slate-400/40">
-        <div className="flex gap-9 text-center xl:text-start flex-col">
-          <h1 className="text-3xl font-medium dark:text-gray-100 text-gray-700 sm:text-4xl md:text-6xl">
-            Start Learning Today!
-          </h1>
-          <p className="dark:text-gray-400 text-gray-500 text-xl sm:text-2xl">
-            Explore our collection of handpicked courses and begin your learning
-            journey.
+    <section className="max-w-6xl mx-auto px-6 py-16 pb-24">
+      <div className="relative rounded-3xl overflow-hidden border border-border/60 bg-gradient-to-br from-primary/5 via-background to-indigo-500/5 px-8 py-16 sm:px-16 text-center">
+        {/* Subtle glow accents */}
+        <div className="absolute -top-20 -left-20 w-64 h-64 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
+        <div className="absolute -bottom-20 -right-20 w-64 h-64 rounded-full bg-indigo-500/10 blur-3xl pointer-events-none" />
+
+        <div className="relative z-10 max-w-2xl mx-auto">
+          <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+            Ready to level up?
+          </h2>
+          <p className="text-muted-foreground text-lg mb-10">
+            Join developers who are building skills the smart way — structured
+            paths, focused study, real progress.
           </p>
-        </div>
-        <div>
           <Link href="/sign-in">
-            <Button size="lg">Get started </Button>
+            <Button
+              size="lg"
+              className="gap-2 text-base px-8 h-12 shadow-lg shadow-primary/20"
+            >
+              Start for free
+              <ArrowRight className="h-4 w-4" />
+            </Button>
           </Link>
         </div>
       </div>

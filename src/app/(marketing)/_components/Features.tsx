@@ -1,51 +1,105 @@
-import { Card, CardContent } from "@/components/ui/card";
-import { BookOpen, Target, Bookmark } from "lucide-react";
+import {
+  BookOpen,
+  Route,
+  StickyNote,
+  BarChart3,
+  CalendarHeart,
+  Search,
+} from "lucide-react";
 
 const features = [
   {
-    icon: <BookOpen className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    title: "Curated Content",
+    icon: Route,
+    title: "Structured Learning Paths",
     description:
-      "Hand-picked courses from top YouTube educators, ensuring quality learning experiences.",
+      "Follow curated roadmaps that guide you step-by-step through topics — from React basics to fullstack mastery.",
+    color: "text-violet-500",
+    bg: "bg-violet-500/10 dark:bg-violet-500/10",
   },
   {
-    icon: <Bookmark className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    title: "Personal Watchlist",
+    icon: StickyNote,
+    title: "In-Video Notes",
     description:
-      "Save your favorite courses to your watchlist and track your learning progress.",
+      "Take timestamped notes while watching. Your notes are linked to the exact moment in the video for quick review.",
+    color: "text-blue-500",
+    bg: "bg-blue-500/10 dark:bg-blue-500/10",
   },
   {
-    icon: <Target className="h-6 w-6 text-blue-600 dark:text-blue-400" />,
-    title: "Smart Search",
-    description: "Find courses by programming language or framework.",
+    icon: BarChart3,
+    title: "Progress Analytics",
+    description:
+      "See which courses you've completed, track your watch time, and stay on top of your learning goals.",
+    color: "text-emerald-500",
+    bg: "bg-emerald-500/10 dark:bg-emerald-500/10",
+  },
+  {
+    icon: CalendarHeart,
+    title: "Consistency Calendar",
+    description:
+      "Build a daily learning habit. Your study heatmap shows streaks and keeps you accountable every week.",
+    color: "text-rose-500",
+    bg: "bg-rose-500/10 dark:bg-rose-500/10",
+  },
+  {
+    icon: BookOpen,
+    title: "Curated Courses",
+    description:
+      "Every video is hand-picked from top YouTube educators — no noise, no low-quality content.",
+    color: "text-amber-500",
+    bg: "bg-amber-500/10 dark:bg-amber-500/10",
+  },
+  {
+    icon: Search,
+    title: "Smart Filtering",
+    description:
+      "Search and filter by language, framework, or topic to quickly find exactly what you want to learn next.",
+    color: "text-sky-500",
+    bg: "bg-sky-500/10 dark:bg-sky-500/10",
   },
 ];
 
 export default function FeaturesSection() {
   return (
-    <section className="flex h-fit max-w-7xl container mx-auto flex-col gap-5 p-10 text-center leading-6 sm:px-20 mt-16">
-      <h2 className="text-3xl font-bold sm:text-4xl mb-12 md:text-6xl">
-        Why Choose DevTube?
-      </h2>
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 last:col-span-full shrink-0 gap-8">
-        {features.map((feature) => (
-          <Card
-            key={feature.title}
-            className="border-0 bg-background/60 backdrop-blur-xl md:last:col-span-2 lg:last:col-span-1"
-          >
-            <CardContent className="pt-6 flex flex-col items-center">
-              <div className="rounded-full w-12 h-12 flex items-center justify-center bg-blue-100 dark:bg-blue-900 mb-4">
-                {feature.icon}
+    <section className="max-w-6xl mx-auto px-6 py-24">
+      {/* Section header */}
+      <div className="text-center mb-16">
+        <p className="text-sm font-semibold text-primary uppercase tracking-widest mb-3">
+          Everything you need
+        </p>
+        <h2 className="text-4xl sm:text-5xl font-bold tracking-tight mb-4">
+          Built for developers who learn
+        </h2>
+        <p className="text-muted-foreground text-lg max-w-xl mx-auto">
+          Not just a video library — a complete toolkit to help you learn
+          consistently and retain what you study.
+        </p>
+      </div>
+
+      {/* Feature grid */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+        {features.map((feature) => {
+          const Icon = feature.icon;
+          return (
+            <div
+              key={feature.title}
+              className="group relative flex flex-col gap-4 rounded-2xl border border-border/60 bg-card/60 backdrop-blur-sm p-6 hover:border-border hover:bg-card transition-all duration-200 hover:shadow-lg hover:shadow-black/5 dark:hover:shadow-black/20"
+            >
+              <div
+                className={`w-10 h-10 rounded-xl flex items-center justify-center ${feature.bg}`}
+              >
+                <Icon className={`h-5 w-5 ${feature.color}`} />
               </div>
-              <h3 className="text-xl sm:text-2xl font-semibold mb-2">
-                {feature.title}
-              </h3>
-              <p className="text-gray-600 text-base sm:text-md dark:text-gray-300">
-                {feature.description}
-              </p>
-            </CardContent>
-          </Card>
-        ))}
+              <div>
+                <h3 className="font-semibold text-base mb-1.5">
+                  {feature.title}
+                </h3>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                  {feature.description}
+                </p>
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

@@ -1,10 +1,10 @@
 import Header from "./_components/Header";
 import Hero from "./_components/Hero";
+import FeaturesSection from "./_components/Features";
 import CTA from "./_components/CTA";
 import Footer from "./_components/Footer";
 import { getCurrentSession } from "@/lib/validate-request";
 import { redirect } from "next/navigation";
-import FeaturesSection from "./_components/Features";
 
 export default async function Home() {
   const { user } = await getCurrentSession();
@@ -12,15 +12,29 @@ export default async function Home() {
 
   return (
     <>
-      <div className="fixed left-0 top-0 h-full w-full backdrop-blur-3xl bg-white dark:bg-gray-900 overflow-hidden">
-        <div className="absolute left-1/2 top-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[70vw] h-[70vh] rounded-full opacity-10 blur-3xl bg-gradient-to-r from-blue-400 via-slate-100 to-gray-900 shadow-2xl" />
+      {/* Background */}
+      <div className="fixed inset-0 -z-10 overflow-hidden bg-background">
+        {/* Top-left orb */}
+        <div className="absolute -top-40 -left-40 w-[600px] h-[600px] rounded-full opacity-[0.07] blur-3xl bg-primary" />
+        {/* Bottom-right orb */}
+        <div className="absolute -bottom-40 -right-40 w-[500px] h-[500px] rounded-full opacity-[0.07] blur-3xl bg-indigo-500" />
+        {/* Center subtle noise texture effect via dot grid */}
+        <div
+          className="absolute inset-0 opacity-[0.02] dark:opacity-[0.04]"
+          style={{
+            backgroundImage: `radial-gradient(circle, currentColor 1px, transparent 1px)`,
+            backgroundSize: "32px 32px",
+          }}
+        />
       </div>
-      <div className="relative h-screen px-1 py-5 sm:p-5 min-w-[370px] overflow-x-hidden">
+
+      <div className="relative min-h-screen flex flex-col min-w-[370px]">
         <Header />
-        <Hero />
-        {/*  <Explore /> */}
-        <FeaturesSection />
-        <CTA />
+        <main className="flex-1">
+          <Hero />
+          <FeaturesSection />
+          <CTA />
+        </main>
         <Footer />
       </div>
     </>
