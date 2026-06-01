@@ -30,72 +30,80 @@ export async function getUserAnalytics(): Promise<{ success: boolean; data?: Ana
     const userId = session.userId;
     const start = performance.now();
 
-    // 1. Total watch time (sum of lastPosition in seconds)
-    const [watchTimeResult] = await db
-      .select({
-        totalSeconds: sql<number>`SUM(${videoProgressTable.lastPosition})`,
-      })
-      .from(videoProgressTable)
-      .where(eq(videoProgressTable.userId, userId));
+    // Run all independent DB queries in parallel for speed
+    const [
+      [watchTimeResult],
+      [completedResult],
+      [notesCountResult],
+      activityDates,
+      actionCounts,
+    ] = await Promise.all([
+      // 1. Total watch time (sum of lastPosition in seconds)
+      db
+        .select({
+          totalSeconds: sql<number>`SUM(${videoProgressTable.lastPosition})`,
+        })
+        .from(videoProgressTable)
+        .where(eq(videoProgressTable.userId, userId)),
+
+      // 2. Total completed videos
+      db
+        .select({
+          count: sql<number>`COUNT(*)`.mapWith(Number),
+        })
+        .from(videoProgressTable)
+        .where(
+          and(
+            eq(videoProgressTable.userId, userId),
+            eq(videoProgressTable.status, "completed")
+          )
+        ),
+
+      // 3. Total notes
+      db
+        .select({
+          count: sql<number>`COUNT(*)`.mapWith(Number),
+        })
+        .from(videoNotesTable)
+        .where(eq(videoNotesTable.userId, userId)),
+
+      // 4a. Heatmap: unique activity dates
+      db.all<{ dateStr: string }>(
+        sql`
+          SELECT DISTINCT substr(created_at, 1, 10) as dateStr
+          FROM video_notes
+          WHERE user_id = ${userId}
+          UNION
+          SELECT DISTINCT substr(updated_at, 1, 10) as dateStr
+          FROM video_progress
+          WHERE user_id = ${userId}
+        `
+      ),
+
+      // 4b. Heatmap: action count per day
+      db.all<{ dateStr: string; actionsCount: number }>(
+        sql`
+          SELECT dateStr, COUNT(*) as actionsCount FROM (
+            SELECT substr(created_at, 1, 10) as dateStr
+            FROM video_notes
+            WHERE user_id = ${userId}
+            UNION ALL
+            SELECT substr(updated_at, 1, 10) as dateStr
+            FROM video_progress
+            WHERE user_id = ${userId}
+          )
+          GROUP BY dateStr
+        `
+      ),
+    ]);
 
     const totalWatchTimeHours = watchTimeResult?.totalSeconds
       ? Math.round((watchTimeResult.totalSeconds / 3600) * 10) / 10
       : 0;
 
-    // 2. Total completed videos
-    const [completedResult] = await db
-      .select({
-        count: sql<number>`COUNT(*)`.mapWith(Number),
-      })
-      .from(videoProgressTable)
-      .where(
-        and(
-          eq(videoProgressTable.userId, userId),
-          eq(videoProgressTable.status, "completed")
-        )
-      );
-
     const totalCompletedCount = completedResult?.count || 0;
 
-    // 3. Total notes
-    const [notesCountResult] = await db
-      .select({
-        count: sql<number>`COUNT(*)`.mapWith(Number),
-      })
-      .from(videoNotesTable)
-      .where(eq(videoNotesTable.userId, userId));
-
     const totalNotesCount = notesCountResult?.count || 0;
-
-    // 4. Heatmap data: Gather dates when notes were created or progress was updated
-    // SQL query to union the formatted dates
-    const activityDates = await db.all<{ dateStr: string }>(
-      sql`
-        SELECT DISTINCT substr(created_at, 1, 10) as dateStr
-        FROM video_notes
-        WHERE user_id = ${userId}
-        UNION
-        SELECT DISTINCT substr(updated_at, 1, 10) as dateStr
-        FROM video_progress
-        WHERE user_id = ${userId}
-      `
-    );
-
-    // Group dates and calculate action count per day
-    const actionCounts = await db.all<{ dateStr: string; actionsCount: number }>(
-      sql`
-        SELECT dateStr, COUNT(*) as actionsCount FROM (
-          SELECT substr(created_at, 1, 10) as dateStr
-          FROM video_notes
-          WHERE user_id = ${userId}
-          UNION ALL
-          SELECT substr(updated_at, 1, 10) as dateStr
-          FROM video_progress
-          WHERE user_id = ${userId}
-        )
-        GROUP BY dateStr
-      `
-    );
 
     const end = performance.now();
     const dbQueryDurationMs = Math.round((end - start) * 100) / 100;

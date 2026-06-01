@@ -290,9 +290,9 @@ export default function StudyWorkspace({
   };
 
   return (
-    <div className="flex flex-col lg:flex-row h-full w-full bg-background text-foreground rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800">
-      {/* Video Section */}
-      <div className="flex-1 flex flex-col justify-between p-4 bg-slate-50 dark:bg-slate-900 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800">
+    <div className="flex flex-col lg:flex-row h-full w-full bg-background text-foreground rounded-lg overflow-hidden border border-slate-200 dark:border-slate-800" style={{ maxHeight: '100%' }}>
+      {/* Video Section - on mobile, don't grow, just take natural height */}
+      <div className="flex-shrink-0 lg:flex-1 flex flex-col justify-between p-3 lg:p-4 bg-slate-50 dark:bg-slate-900 border-b lg:border-b-0 lg:border-r border-slate-200 dark:border-slate-800">
         <div id="youtube-study-player-wrapper" className="relative aspect-video w-full overflow-hidden rounded-lg bg-black">
           <div id="youtube-study-player-container" className="absolute inset-0 h-full w-full border-0" />
         </div>
@@ -326,8 +326,8 @@ export default function StudyWorkspace({
         </div>
       </div>
 
-      {/* Notes Section */}
-      <div className="w-full lg:w-96 flex flex-col bg-slate-50 dark:bg-slate-950 h-[450px] lg:h-auto border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800">
+      {/* Notes Section - on mobile, fill remaining viewport height */}
+      <div className="w-full lg:w-96 flex flex-col bg-slate-50 dark:bg-slate-950 flex-1 min-h-0 lg:h-auto border-t lg:border-t-0 lg:border-l border-slate-200 dark:border-slate-800">
         <div className="p-4 border-b border-slate-200 dark:border-slate-800 flex items-center justify-between bg-slate-100/50 dark:bg-slate-900/50">
           <div className="flex items-center gap-2">
             <BookOpen className="size-5 text-emerald-500 dark:text-emerald-400" />
@@ -386,13 +386,13 @@ export default function StudyWorkspace({
         </div>
 
         {/* Note Input */}
-        <form onSubmit={handleAddNote} className="p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-100/30 dark:bg-slate-900/30 space-y-2">
+        <form onSubmit={handleAddNote} className="flex-shrink-0 p-3 lg:p-4 border-t border-slate-200 dark:border-slate-800 bg-slate-100/30 dark:bg-slate-900/30 space-y-2" style={{ paddingBottom: `max(0.75rem, env(safe-area-inset-bottom))` }}>
           <div className="relative">
             <textarea
               value={newNoteText}
               onChange={(e) => setNewNoteText(e.target.value)}
               placeholder="Write a note... (e.g. Set up database connection)"
-              className="w-full text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg p-2.5 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 resize-none h-20 focus:outline-none transition duration-150"
+              className="w-full text-sm bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 focus:border-emerald-500 focus:ring-1 focus:ring-emerald-500 rounded-lg p-2.5 text-slate-800 dark:text-slate-200 placeholder-slate-400 dark:placeholder-slate-600 resize-none h-16 lg:h-20 focus:outline-none transition duration-150"
             />
           </div>
           <div className="flex items-center justify-between gap-2">

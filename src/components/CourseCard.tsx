@@ -10,7 +10,7 @@ import {
 import { useToast } from "@/hooks/use-toast";
 import type { YoutubeDetails } from "@/lib/types";
 import { DialogTitle } from "@radix-ui/react-dialog";
-import { Bookmark, Play, X } from "lucide-react";
+import { Bookmark, Play } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState, useTransition } from "react";
@@ -202,18 +202,8 @@ export default function CourseCard({
       
       {isMobile ? (
         isExpanded && (
-          <div className="fixed inset-0 z-50 bg-background text-foreground flex flex-col p-4 pt-12 overflow-y-auto">
-            <div className="flex justify-end mb-2">
-              <Button
-                variant="ghost"
-                size="icon"
-                onClick={toggleExpand}
-                className="bg-black/50 text-white"
-              >
-                <X className="size-6" />
-              </Button>
-            </div>
-            <div className="flex-1 h-full">
+          <div className="fixed inset-0 z-50 bg-background text-foreground flex flex-col overflow-hidden">
+            <div className="flex-1 min-h-0">
               <StudyWorkspace
                 videoId={videoId}
                 title={title}

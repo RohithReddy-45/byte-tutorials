@@ -8,7 +8,7 @@ const nextConfig: NextConfig = {
   // },
   experimental: {
     staleTimes: {
-      dynamic: 30,
+      dynamic: 60,
     },
   },
   typescript: {
