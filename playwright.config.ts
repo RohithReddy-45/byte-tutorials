@@ -22,11 +22,12 @@ export default defineConfig({
   retries: 0,
   workers: isCi ? 1 : 3,
   reporter: "html",
+  globalSetup: path.resolve("./tests/setup/global-setup"),
   globalTeardown: path.resolve("./tests/setup/global-teardown"),
   use: {
     actionTimeout: 0,
     headless: isCi,
-    storageState: isCi ? "storageState.json" : undefined,
+    storageState: "storageState.json",
     launchOptions: {
       args: ["--disable-blink-features=AutomationControlled"],
     },

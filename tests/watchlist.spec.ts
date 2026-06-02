@@ -12,6 +12,8 @@ test.describe("Unauthenticated user cannot access watchlist page", () => {
 });
 
 test.describe("Authenticated watchlist page", () => {
+  test.describe.configure({ mode: "serial" });
+
   test.beforeEach(async ({ page }) => {
     await page.goto("/courses/watch-list");
   });

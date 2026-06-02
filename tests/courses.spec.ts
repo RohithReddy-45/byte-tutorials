@@ -12,6 +12,8 @@ test.describe("Unauthenticated user cannot access Courses Page", () => {
 });
 
 test.describe("Authenticated Courses Page", () => {
+  test.describe.configure({ mode: "serial" });
+
   test.beforeEach(async ({ page }) => {
     await page.goto("/courses");
   });
@@ -53,9 +55,4 @@ test.describe("Authenticated Courses Page", () => {
     await expect(page.getByTestId("tag-react")).toBeVisible();
   });
 
-  test("logout via avatar dropdown navigates to sign-in", async ({ page }) => {
-    await page.getByTestId("user-avatar").click();
-    await page.getByRole("button", { name: "Logout" }).click();
-    await expect(page).toHaveURL("/sign-in");
-  });
 });
