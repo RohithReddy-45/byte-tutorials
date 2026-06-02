@@ -12,13 +12,17 @@ test.describe("Marketing Page", () => {
     );
   });
 
-  test("start learning now link", async ({ page }) => {
-    await page.getByRole("link", { name: "Start learning now" }).click();
+  test("start learning for free link navigates to sign-in", async ({ page }) => {
+    await page.getByRole("link", { name: "Start learning for free" }).click();
     await expect(page).toHaveURL("/sign-in");
   });
 
-  test("sign in link", async ({ page }) => {
-    await page.getByRole("button", { name: "Sign in" }).click();
+  test("sign in button navigates to sign-in page", async ({ page }) => {
+    await page.getByRole("link", { name: "Sign in" }).click();
     await expect(page).toHaveURL("/sign-in");
+  });
+
+  test("unauthenticated user stays on marketing page", async ({ page }) => {
+    await expect(page).toHaveURL("/");
   });
 });

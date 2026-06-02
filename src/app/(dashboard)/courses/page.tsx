@@ -89,6 +89,7 @@ export default async function Dashboard(props: { searchParams: SearchParams }) {
           <h1 className="text-xl mt-2 mb-4">Search results for "{query}"</h1>
         ) : null}
         <Suspense
+          key={`${query}-${tech}-${page}`}
           fallback={
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4">
               {[...Array(8)].map((_, index) => (
