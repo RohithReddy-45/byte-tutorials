@@ -1,36 +1,134 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 📺 Byte Tutorials
 
-## Getting Started
+> A curated YouTube learning platform — track your progress, take notes, and learn smarter.
 
-First, run the development server:
+Byte Tutorials is a full-stack web app that transforms YouTube content into a structured learning experience. Browse curated playlists, track your watch progress, take timestamped notes, and manage your personal watch list — all in one place.
+
+---
+
+## 🎬 Demo
+
+
+---
+
+## ✨ Features
+
+- 🔐 **OAuth Authentication** — Sign in with Google or GitHub via Arctic
+- 📚 **Curated Playlists** — Organized course playlists sourced from YouTube
+- ▶️ **Video Progress Tracking** — Automatically saves your last watched position and completion status (`not started`, `in progress`, `completed`)
+- 📝 **Timestamped Notes** — Add notes tied to specific moments in a video
+- ❤️ **Watch List** — Save videos to revisit later
+- 📊 **Analytics** — Track learning activity and course engagement
+
+---
+
+## 🛠️ Tech Stack
+
+| Category | Technology |
+|---|---|
+| **Framework** | [Next.js 15](https://nextjs.org/) (App Router + Turbopack) |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) |
+| **Database** | [LibSQL / Turso](https://turso.tech/) + [Better SQLite3](https://github.com/WiseLibs/better-sqlite3) |
+| **ORM** | [Drizzle ORM](https://orm.drizzle.team/) |
+| **Auth** | [Arctic](https://arcticjs.dev/) (Google & GitHub OAuth) + [@oslojs](https://oslojs.dev/) |
+| **Styling** | [Tailwind CSS v3](https://tailwindcss.com/) + [tailwindcss-animate](https://github.com/jamiebuilds/tailwindcss-animate) + [tailwindcss-motion](https://github.com/romboHQ/tailwindcss-motion) |
+| **Error Monitoring** | [Sentry](https://sentry.io/) |
+| **Testing** | [Playwright](https://playwright.dev/) |
+| **Linting / Formatting** | [Biome](https://biomejs.dev/) |
+| **Package Manager** | [pnpm](https://pnpm.io/) |
+
+---
+
+## 🚀 Getting Started
+
+### Prerequisites
+
+- [Node.js](https://nodejs.org/) >= 18
+- [pnpm](https://pnpm.io/) >= 11
+
+### Installation
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+# Clone the repository
+git clone https://github.com/RohithReddy-45/byte-tutorials.git
+cd byte-tutorials
+
+# Install dependencies
+pnpm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Environment Variables
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Copy the example env file and fill in your values:
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+cp .env.example .env
+```
 
-## Learn More
+Key variables to configure:
 
-To learn more about Next.js, take a look at the following resources:
+```env
+# Database (Turso / LibSQL)
+DATABASE_URL=
+DATABASE_AUTH_TOKEN=
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+# OAuth — Google
+GOOGLE_CLIENT_ID=
+GOOGLE_CLIENT_SECRET=
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+# OAuth — GitHub
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
 
-## Deploy on Vercel
+# App
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+```
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+### Running Locally
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+pnpm dev
+```
+
+Open [http://localhost:3000](http://localhost:3000) in your browser.
+
+### Database
+
+```bash
+# Push schema to database
+pnpm drizzle-kit push
+
+# Seed with sample data
+pnpm tsx src/db/seed.ts
+```
+
+---
+
+## 🧪 Testing
+
+```bash
+# Run end-to-end tests
+pnpm e2e
+
+# Run with Playwright UI
+pnpm e2e:ui
+```
+
+---
+
+## 📁 Project Structure
+
+```
+src/
+├── app/
+│   ├── (auth)/          # Login / signup routes
+│   ├── (dashboard)/     # Courses, watch list, analytics
+│   ├── (marketing)/     # Landing page, terms, privacy
+│   └── admin/           # Admin dashboard
+├── components/          # Shared UI components
+├── db/                  # Drizzle schema, migrations, seed
+├── helpers/             # Server utilities
+├── hooks/               # Custom React hooks
+├── lib/                 # Auth, session, OAuth logic
+└── providers/           # Theme and toast providers
+```
