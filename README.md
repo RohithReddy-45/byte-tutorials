@@ -8,6 +8,7 @@ Byte Tutorials is a full-stack web app that transforms YouTube content into a st
 
 ## 🎬 Demo
 
+https://github.com/user-attachments/assets/3b61d3b4-aea5-4490-92ca-7a09f6746cd1
 
 ---
 
